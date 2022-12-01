@@ -77,6 +77,7 @@ def main():
     ]
     tests = all_tests[0:]
     for (name, fn) in tests:
+        print(name)
         res = fn()
         print('-'*80)
         print('{}: {}'.format(name, res))
