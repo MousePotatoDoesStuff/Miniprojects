@@ -99,6 +99,18 @@ if True:
 
     EDR_MC = EventDataRegistry()
 
+class test:
+    def __init__(self,a,b,c):
+        self.a = a
+        self.b = b
+        self.c = c
+        return
+    def load(self,local:LocalSaves,filename):
+        self.a=local.get(filename,'a')
+        self.b=local.get(filename,'b')
+        self.c=local.get(filename,'c')
+        return
+
 
 def main():
     return
