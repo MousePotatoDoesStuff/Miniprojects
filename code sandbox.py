@@ -1,6 +1,6 @@
 def combine(A:dict,B:dict):
     C={**A,**B}
-    return 
+    return
 
 
 def main():
