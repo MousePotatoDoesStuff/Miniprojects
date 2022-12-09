@@ -1,6 +1,6 @@
 class CharacterMood:
     def __init__(self):
-        return 
+        return
 
 
 class CharacterState:
