@@ -13,6 +13,13 @@ def closest_ratio(f, max_rem=0.01, minlog=None, limit=10000):
 
 def main():
     L = []
+    mode = input('Mode:')
+    if mode == '1':
+        a = float(input('a:'))
+        b = float(input('b:'))
+        val = a / b
+    else:
+        val = float(input('v:'))
     R = closest_ratio(1171 / 655, minlog=L)
     print(R)
     for e in L:
