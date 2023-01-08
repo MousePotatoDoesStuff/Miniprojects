@@ -17,7 +17,7 @@ def main():
     for e in L:
         if 2023 % e == 0:
             print(e, 2023 // e)
-    L=makelist(1000,42)
+    L = makelist(1000, 42)
     print(L)
     return
 
