@@ -20,7 +20,7 @@ def main():
         val = a / b
     else:
         val = float(input('v:'))
-    R = closest_ratio(1171 / 655, minlog=L)
+    R = closest_ratio(val, minlog=L)
     print(R)
     for e in L:
         print(e)
