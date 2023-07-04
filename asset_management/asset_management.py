@@ -1,5 +1,6 @@
 import os
 import hashlib
+# Created with assistance from ChatGPT
 
 class AssetFile:
     def __init__(self, size: int, modified: float):
@@ -24,12 +25,39 @@ class AssetFile:
     def __repr__(self):
         return f"AssetFile(size={self.size}, modified={self.modified})"
 
+
 class AssetFileManager:
-    def __init__(self):
+    def __init__(self, rootfolder):
+        self.rootfolder = rootfolder
         self.files = {}
 
     def add_file(self, file_path, size, modified):
         self.files[file_path] = AssetFile(size, modified)
+
+    def import_submanager_data(self, submanager):
+        if not isinstance(submanager, AssetFileManager):
+            return -1
+
+        if not submanager.rootfolder.startswith(self.rootfolder):
+            return -2
+
+        relative_path = os.path.relpath(submanager.rootfolder, self.rootfolder)
+
+        for file_path, asset_file in submanager.files.items():
+            new_file_path = os.path.join(self.rootfolder, relative_path, file_path)
+            self.files[new_file_path] = asset_file
+
+        return 0
+
+
+    def generate_from_directory_data(self, local_file_managers=None):
+        # Create a set of excluded directories
+        local_dict=dict()
+        if local_file_managers is not None:
+            for lfm in local_file_managers:
+                lfm:AssetFileManager
+                local_dict[lfm.rootfolder]=lfm
+
 
     def compare_to(self, other_file_manager):
         results = []
@@ -41,7 +69,11 @@ class AssetFileManager:
                 if asset_file != other_asset_file:
                     results.append((file_path, asset_file, other_asset_file))
         return results
+
+
 def main():
+    X = AssetFileManager("C:\\Projects\\py_miniprojects\\Miniprojects")
+    X.generate_from_directory_data()
     return
 
 
