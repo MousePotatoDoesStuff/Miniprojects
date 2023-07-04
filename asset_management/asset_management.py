@@ -1,5 +1,7 @@
 import os
 import hashlib
+
+
 # Created with assistance from ChatGPT
 
 class AssetFile:
@@ -49,15 +51,13 @@ class AssetFileManager:
 
         return 0
 
-
     def generate_from_directory_data(self, local_file_managers=None):
         # Create a set of excluded directories
-        local_dict=dict()
+        local_dict = dict()
         if local_file_managers is not None:
             for lfm in local_file_managers:
-                lfm:AssetFileManager
-                local_dict[lfm.rootfolder]=lfm
-
+                lfm: AssetFileManager
+                local_dict[lfm.rootfolder] = lfm
 
     def compare_to(self, other_file_manager):
         results = []
@@ -74,6 +74,8 @@ class AssetFileManager:
 def main():
     X = AssetFileManager("C:\\Projects\\py_miniprojects\\Miniprojects")
     X.generate_from_directory_data()
+    for e in X.files:
+        print(X)
     return
 
 
