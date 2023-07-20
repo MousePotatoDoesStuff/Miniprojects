@@ -79,7 +79,7 @@ class AssetFileManager:
                 local_dict[lfm.rootfolder] = lfm
         browser=FileBrowser(self.rootfolder)
         for e in browser.iterate_filepaths(lambda x:True):
-            print(e)
+            self.files[e]=new AssetFile('test',0,0)
 
 
 
