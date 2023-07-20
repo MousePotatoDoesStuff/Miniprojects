@@ -6,7 +6,8 @@ class FileBrowser:
         self.root=root
         return
     def iterate_filepaths(self,pathfilter):
-        for root, dirs, files in os.walk(self.root):
+        X=os.walk(self.root)
+        for root, dirs, files in X:
             for file in files:
                 file_path = os.path.join(root, file)
                 if pathfilter(file_path):

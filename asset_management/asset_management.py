@@ -1,13 +1,32 @@
+import json
 import os
 import hashlib
 
+from Miniprojects.asset_management.file_browser import FileBrowser
 
 # Created with assistance from ChatGPT
 
+private_inputs=dict()
+def get_private_inputs(file_path="asset_inputs.private.txt", dest=None):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError
+    if dest is None:
+        dest = private_inputs
+    file=open(file_path,'r')
+    buf=json.load(file)
+    file.close()
+    dest.update(buf)
+    return
+
+
 class AssetFile:
-    def __init__(self, size: int, modified: float):
+    def __init__(self, size: int, modified: float, tags=None):
+        if tags is None:
+            tags = dict()
+        tags:dict
         self.size = size
         self.modified = modified
+        self.tags:dict = tags
 
     def size_diff(self, other):
         if not isinstance(other, AssetFile):
@@ -58,6 +77,11 @@ class AssetFileManager:
             for lfm in local_file_managers:
                 lfm: AssetFileManager
                 local_dict[lfm.rootfolder] = lfm
+        browser=FileBrowser(self.rootfolder)
+        for e in browser.iterate_filepaths(lambda x:True):
+            print(e)
+
+
 
     def compare_to(self, other_file_manager):
         results = []
@@ -72,7 +96,11 @@ class AssetFileManager:
 
 
 def main():
-    X = AssetFileManager("C:\\Projects\\py_miniprojects\\Miniprojects")
+    private_inputs['testdir']="C:\\Projects\\py_miniprojects\\Miniprojects"
+    get_private_inputs()
+    testdir=private_inputs["testdir"]
+    print(testdir)
+    X = AssetFileManager(testdir)
     X.generate_from_directory_data()
     for e in X.files:
         print(X)
