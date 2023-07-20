@@ -28,9 +28,11 @@ def create_endswith_checker(substring):
 def main():
     root=input("->")
     X=FileBrowser(root)
-    text=input("->")
-    for e in X.iterate_files(create_endswith_checker('.rpy'),lambda X:text in X):
-        print(e)
+    text='TEXT'
+    while len(text)>0:
+        text=input("->")
+        for e in X.iterate_files(create_endswith_checker('.rpy'),lambda X:text in X):
+            print(e)
     return
 
 
