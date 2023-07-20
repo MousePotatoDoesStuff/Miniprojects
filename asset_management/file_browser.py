@@ -33,7 +33,7 @@ def main():
     while len(text)>0:
         text=input("->")
         for e in X.iterate_files(create_endswith_checker('.rpy'),lambda X:text in X):
-            print(e)
+            print("->",e)
     return
 
 
