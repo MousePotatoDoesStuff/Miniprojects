@@ -98,7 +98,7 @@ class AssetFileManager:
 
 def main():
     private_inputs['testdir'] = "C:\\Projects\\py_miniprojects\\Miniprojects"
-    PrivateInput.get_private_inputs()
+    PrivateInput.get_private_inputs(private_inputs)
     testdir = private_inputs["testdir"]
     print(testdir)
     X = AssetFileManager(testdir)

@@ -1,14 +1,10 @@
 import json
 import os
 
-private_inputs = dict()
 
-
-def get_private_inputs(file_path="asset_inputs.private.txt", dest=None):
+def get_private_inputs(dest, file_path="asset_inputs.private.txt"):
     if not os.path.exists(file_path):
         raise FileNotFoundError
-    if dest is None:
-        dest = private_inputs
     file = open(file_path, 'r')
     buf = json.load(file)
     file.close()
