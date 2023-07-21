@@ -1,6 +1,7 @@
 import json
 import os
 import hashlib
+from datetime import datetime
 
 import Miniprojects.private_input_management as PrivateInput
 
@@ -17,6 +18,24 @@ class AssetFile:
         self.size = size
         self.modified = modified
         self.tags: dict = tags
+
+    def read_physical_file(self, path):
+        try:
+            # Check if the file exists at the given path
+            if not os.path.isfile(path):
+                print(f"Error: File not found at {path}")
+                return
+
+            # Get the file's size in bytes
+            self.size = os.path.getsize(path)
+
+            # Get the file's last modified timestamp
+            modified_timestamp = os.path.getmtime(path)
+            self.modified = datetime.fromtimestamp(modified_timestamp)
+
+        except OSError as e:
+            print(f"Error: Failed to read physical file: {e}")
+            # You can handle the exception as per your requirement
 
     def size_diff(self, other):
         if not isinstance(other, AssetFile):
@@ -79,8 +98,9 @@ class AssetFileManager:
             for filename in os.listdir(current_folder):
                 file_path = os.path.join(current_folder, filename)
                 if os.path.isfile(file_path):
-                    # Do something with the file_path, e.g., process the file
-                    print("File:", file_path)
+                    file=AssetFile(0,0)
+                    file.read_physical_file(file_path)
+                    s
                 elif os.path.isdir(file_path):
                     stack.append(file_path)
 

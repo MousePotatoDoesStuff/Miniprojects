@@ -12,7 +12,7 @@ class AssetManagementGUI:
         self.root.title("Asset Manager - " + manager.rootfolder)
 
         # Load your image file
-        image_path = manager.files  # Replace with the path to your image
+        image_path = manager.generate_from_directory_data()  # Replace with the path to your image
         self.images = \
             [Image.open(image_path + e) for e in ["kittens.jpg","froggy kitten.jpg"]]
         self.photo = ImageTk.PhotoImage
