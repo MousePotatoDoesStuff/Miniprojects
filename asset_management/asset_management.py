@@ -79,8 +79,10 @@ class AssetFileManager:
 
         return 0
 
-    def generate_from_directory_data(self, local_file_managers=None):
+    def generate_from_directory_data(self, local_file_managers=None, reset=False):
         # Create a set of excluded directories
+        if reset:
+            self.files=dict()
         local_dict = dict()
         if local_file_managers is not None:
             for lfm in local_file_managers:
@@ -100,7 +102,7 @@ class AssetFileManager:
                 if os.path.isfile(file_path):
                     file=AssetFile(0,0)
                     file.read_physical_file(file_path)
-                    s
+                    self.files[file_path]=file
                 elif os.path.isdir(file_path):
                     stack.append(file_path)
 
@@ -114,6 +116,18 @@ class AssetFileManager:
                 if asset_file != other_asset_file:
                     results.append((file_path, asset_file, other_asset_file))
         return results
+    def get_files_in_directory(self, dir_path):
+        """
+        Given a directory path, returns the files recorded by the AssetFileManager
+        that are present in the specified directory.
+        :param dir_path: The directory path to search for files.
+        :return: A list of files recorded in the given directory.
+        """
+        files_in_directory = []
+        for file_path in self.files.keys():
+            if os.path.dirname(file_path) == dir_path:
+                files_in_directory.append(file_path)
+        return files_in_directory
 
 
 def main():
@@ -123,8 +137,7 @@ def main():
     print(testdir)
     X = AssetFileManager(testdir)
     X.generate_from_directory_data()
-    for e in X.files:
-        print(X)
+    print("\n".join(X.get_files_in_directory(testdir)) )
     return
 
 

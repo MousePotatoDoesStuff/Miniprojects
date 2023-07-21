@@ -9,10 +9,13 @@ class AssetManagementGUI:
     def __init__(self, root, manager: AssetFileManager):
         self.root = root
         self.manager = manager
+        self.current_directory = None
+        self.current_dir_files = None
+        self.current_file = None
         self.root.title("Asset Manager - " + manager.rootfolder)
 
         # Load your image file
-        image_path = manager.generate_from_directory_data()  # Replace with the path to your image
+        image_path =   # Replace with the path to your image
         self.images = \
             [Image.open(image_path + e) for e in ["kittens.jpg","froggy kitten.jpg"]]
         self.photo = ImageTk.PhotoImage
@@ -26,7 +29,7 @@ class AssetManagementGUI:
         self.button_frame = ttk.Frame(root)
         self.button_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
-        self.button1 = ttk.Button(self.button_frame, text="Button 1", command=self.on_button1_click)
+        self.button1 = ttk.Button(self.button_frame, text="Refresh", command=self.on_button1_click)
         self.button1.pack(pady=5)
 
         self.button2 = ttk.Button(self.button_frame, text="Button 2", command=self.on_button2_click)
@@ -34,6 +37,10 @@ class AssetManagementGUI:
 
         self.button3 = ttk.Button(self.button_frame, text="Button 3", command=self.on_button3_click)
         self.button3.pack(pady=5)
+    def refresh_directory(self):
+        self.manager.generate_from_directory_data(reset=True)
+        self.current_dir_files=manager.get_files_in_directory(self.current_directory)
+        self.current_directory=cu
 
     def on_button1_click(self):
         # Define the action when Button 1 is clicked
