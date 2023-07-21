@@ -2,19 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 
-from Miniprojects.asset_management.asset_management import AssetFileManager
+from Miniprojects.asset_management.asset_management import *
 
 
 class AssetManagementGUI:
-    def __init__(self, root, manager:AssetFileManager):
+    def __init__(self, root, manager: AssetFileManager):
         self.root = root
-        self.manager=manager
-        self.root.title("Asset Manager - "+manager.rootfolder)
+        self.manager = manager
+        self.root.title("Asset Manager - " + manager.rootfolder)
 
         # Load your image file
-        image_path = "C:\\Projects\\py_miniprojects\\Miniprojects\\asset_management\\"  # Replace with the path to your image
-        self.images=\
-            [Image.open(image_path+e) for e in "kittens.jpg" "froggy kitten.jpg"]
+        image_path = manager.files  # Replace with the path to your image
+        self.images = \
+            [Image.open(image_path + e) for e in ["kittens.jpg","froggy kitten.jpg"]]
         self.photo = ImageTk.PhotoImage
         self.photo = ImageTk.PhotoImage(self.images[0])
 
@@ -49,11 +49,13 @@ class AssetManagementGUI:
 
 
 if __name__ == "__main__":
+    private_inputs = dict()
+    private_inputs['testdir'] = "C:\\Projects\\py_miniprojects\\Miniprojects\\asset_management"
+    PrivateInput.get_private_inputs(private_inputs)
+    testdir = private_inputs["testdir"]
+    manager = AssetFileManager(testdir)
     root = tk.Tk()
-    private_data=dict()
-    get_private_inputs()
-    manager=
-    app = AssetManagementGUI(root)
+    app = AssetManagementGUI(root, manager)
     root.mainloop()
 
 
