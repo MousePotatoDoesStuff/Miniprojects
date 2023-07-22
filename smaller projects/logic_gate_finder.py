@@ -69,12 +69,26 @@ def generate_perms_marked(data):
 
 
 
-def generate_input(gate, data):
+def generate_input(gate, data, mode=False):
     if len(gate) < (1 << len(data)):
         raise Exception("Too many inputs!")
-    M = generate_perms(data)
+    M = generate_perms_marked(data) if mode else generate_perms(data)
     R = [process(gate, E) for E in M]
     return R
+
+
+def generate_all_inputs(gate,values): #[0,1,'a']
+    X=[[]]
+    for e in gate:
+        Y=[]
+        for f in values:
+            for cur in X:
+                Y.append(cur+[f])
+        X=Y
+    X=[tuple(E)for E in X]
+    for e in X:
+        print(e)
+    return
 
 
 def test_variant(gate, data, goal):
