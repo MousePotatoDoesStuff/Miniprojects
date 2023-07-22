@@ -47,16 +47,16 @@ def generate_perms(data):
 
 
 def generate_perms_marked(data):
-    S=set(data)
-    S-={0,1}
-    vlist=list(S)
-    vlist.sort()
-    variants={E:[] for E in vlist}
+    variants={E:[] for E in set(data)}
     for i in range(len(data)):
-        L:list=variants[data[i]]
-        L.append(i)
+        variants[data[i]].append(i)
+    variants.pop(0)
+    variants.pop(1)
+    L=list(variants.keys())
+    L.sort()
     M = [data]
-    for var,indices in variants.items():
+    for var in L:
+        indices=variants[var]
         N=[]
         for E in M:
             X=list(E)
