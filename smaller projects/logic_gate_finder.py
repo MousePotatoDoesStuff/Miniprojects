@@ -6,6 +6,23 @@ bin_to_tuple = lambda b, n: [
 ][(n > 0) + (n > 1)](b)
 
 
+def rearrange_indices(number, size, keylist):
+    T = bin_to_tuple(number, size)
+    V = tuple([keylist[T[i]] for i in range(size)])
+    return tuple_to_bin(V)
+
+
+def rearrange_gate(gate, size, indices):
+    n = len(gate)
+    M = [(bin_to_tuple(i, size), gate[i]) for i in range(len(gate))]
+    print(M)
+    N = [(tuple([T[indices[i]] for i in range(size)]), v) for T, v in M]
+    print(N)
+    N.sort()
+    print(N)
+    return [e[1] for e in N]
+
+
 def process(gate, data, check=True):
     if check and len(gate) < (1 << len(data)):
         raise Exception("Too many inputs!")
@@ -37,27 +54,47 @@ def generate_input(gate, data):
     return R
 
 
+def test_variant(gate, data, goal):
+    X = generate_input(gate, data)
+    print(X)
+    print(goal)
+    return
+
+
 class LogicGateNaiveGroup:
     def __init__(self, size, safety_block=10):
         if size > safety_block:
             raise Exception("Too big!")
         self.size = size
         X = [[]]
-        for i in range(self.size):
+        for i in range(1 << self.size):
             Y = []
             for E in X:
                 Y.extend([E + [0], E + [1]])
+            X = Y
         self.variants = [tuple(E) for E in X]
         return
 
+    def test_all_variants(self):
+        pass
 
-def main():
-    gate = (0, 0, 0, 1)
-    res = process(gate, [0, 1])
+
+def test_gate():
+    gate = (0, 0, 1, 0)
     for i in range(4):
         print(process(gate, bin_to_tuple(i, 2)))
-    print(generate_perms([-1,1]))
-    print(generate_input(gate,[-1,1]))
+    print(generate_perms([-1, 1]))
+    print(generate_input(gate, [-1, 1]))
+    gate2 = (0, 0, 1, 0, 0, 0, 0, 0)
+    gate3 = rearrange_gate(gate2, 3, [1, 2, 0])
+    print(gate2)
+    print(gate3)
+
+
+def main():
+    lgng = LogicGateNaiveGroup(3)
+    gate = lgng.variants[3]
+    print(gate,test_variant(gate, [0, 0, 0], [0,0]))
     return
 
 
