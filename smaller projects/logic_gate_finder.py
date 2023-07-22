@@ -46,6 +46,29 @@ def generate_perms(data):
     return M
 
 
+def generate_perms_marked(data):
+    S=set(data)
+    S-={0,1}
+    vlist=list(S)
+    vlist.sort()
+    variants={E:[] for E in vlist}
+    for i in range(len(data)):
+        L:list=variants[data[i]]
+        L.append(i)
+    M = [data]
+    for var,indices in variants.items():
+        N=[]
+        for E in M:
+            X=list(E)
+            for value in [0,1]:
+                for e in indices:
+                    X[e]=value
+                N.append(tuple(X))
+        M=N
+    return M
+
+
+
 def generate_input(gate, data):
     if len(gate) < (1 << len(data)):
         raise Exception("Too many inputs!")
@@ -90,11 +113,19 @@ def test_gate():
     print(gate2)
     print(gate3)
 
+def test_genperms():
+    data=[0,1,'a',1,'b','a',0]
+    print(generate_perms(data))
+    print(generate_perms_marked(data))
 
-def main():
+def test_lgng():
     lgng = LogicGateNaiveGroup(3)
     gate = lgng.variants[3]
     print(gate,test_variant(gate, [0, 0, 0], [0,0]))
+
+
+def main():
+    test_genperms()
     return
 
 
