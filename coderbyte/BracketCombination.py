@@ -14,6 +14,16 @@ def BracketCombinationsNaive(num):
     X=Y
   return last
 
+def BracketCombinations(num):
+    X=dict()
+    L=[(num,0)]
+    while True:
+        M=[]
+        for E in L:
+            pass
+
+
+
 
 if __name__ == "__main__":
     for i in range(10):
