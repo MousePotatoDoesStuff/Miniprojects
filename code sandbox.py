@@ -2,26 +2,46 @@ from typing import List
 
 
 class Solution:
-    def myPow(self, x: float, n: int) -> float:
-        if n==0:
-            return 1
-        if n<0:
-            x=1/x
-            n=-n
-        cur=x
-        res=1
-        while n>0:
-            if n&1:
-                res*=cur
-            cur*=cur
-            n//=2
-        return res
-
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        n = len(nums)
+        D = dict()
+        for i,e in enumerate(nums):
+            L=D.get(e,[])
+            L.append(i)
+            D[e]=L
+        R = set()
+        zero = 0
+        for zero in range(n):
+            if nums[zero] >= 0:
+                break
+        zero_right = zero
+        for zero_right in range(zero,n):
+            if nums[zero_right] > 0:
+                break
+        else:
+            zero_right=n
+        print(zero,zero_right)
+        if zero_right - zero >= 3:
+            R.add((0, 0, 0))
+        for i in range(zero):
+            e=nums[i]
+            for j in range(zero_right, n):
+                f=nums[j]
+                s=-e-f
+                if s in D:
+                    for k in D[s]:
+                        if k not in [i,j]:
+                            R.add((e,s,f))
+                            print(e,s,f)
+                            break
+                print(i, j, '|', s)
+        return [list(E) for E in R]
 
 
 def main():
     X = Solution()
-    print(X.myPow(2,9))
+    print(X.threeSum([0,0,0]))
 
 
 if __name__ == "__main__":
