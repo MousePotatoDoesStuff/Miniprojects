@@ -4,6 +4,7 @@ from typing import List
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
+        print(nums)
         n = len(nums)
         D = dict()
         for i,e in enumerate(nums):
