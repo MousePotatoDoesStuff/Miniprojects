@@ -2,47 +2,29 @@ from typing import List
 
 
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        nums.sort()
-        print(nums)
-        n = len(nums)
-        D = dict()
-        for i,e in enumerate(nums):
-            L=D.get(e,[])
-            L.append(i)
-            D[e]=L
-        R = set()
-        zero = 0
-        for zero in range(n):
-            if nums[zero] >= 0:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        i=m-1
+        j=n-1
+        for k in range(m+n-1,-1,-1):
+            if j<0:
                 break
-        zero_right = zero
-        for zero_right in range(zero,n):
-            if nums[zero_right] > 0:
-                break
-        else:
-            zero_right=n
-        print(zero,zero_right)
-        if zero_right - zero >= 3:
-            R.add((0, 0, 0))
-        for i in range(zero):
-            e=nums[i]
-            for j in range(zero_right, n):
-                f=nums[j]
-                s=-e-f
-                if s in D:
-                    for k in D[s]:
-                        if i<k<j:
-                            R.add((e,s,f))
-                            print(e,s,f)
-                            break
-                print(i, j, '|', s)
-        return [list(E) for E in R]
+            if i<0 or nums1[i]<nums2[j]:
+                nums1[k]=nums2[j]
+                j-=1
+                continue
+            nums1[k]=nums1[i]
+            i-=1
+            continue
+        return
+
 
 
 def main():
     X = Solution()
-    print(X.threeSum([0,0,0]))
+    A=[1,3,5,7,0,0,0]
+    B=[2,4,6]
+    X.merge(A,4,B,3)
+    print(A)
 
 
 if __name__ == "__main__":
