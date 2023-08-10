@@ -32,7 +32,7 @@ class Solution:
                 s=-e-f
                 if s in D:
                     for k in D[s]:
-                        if k not in [i,j]:
+                        if i<k<j:
                             R.add((e,s,f))
                             print(e,s,f)
                             break
