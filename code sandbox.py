@@ -13,12 +13,12 @@ class Solution:
                     X[j]=0
                 X[j+1]+=X[j]
             print(X)
-        return X[-1]
+        return X[-2]
 
 
 def main():
     X = Solution()
-    res=X.uniquePathsWithObstacles([[0,0,0],[0,1,0],[0,0,0]])
+    res=X.uniquePathsWithObstacles([[1,0,0],[0,0,0],[0,0,0]])
     print(res)
 
 
