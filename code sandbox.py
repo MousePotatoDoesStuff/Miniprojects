@@ -1,30 +1,25 @@
 from typing import List
 
-
 class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        i=m-1
-        j=n-1
-        for k in range(m+n-1,-1,-1):
-            if j<0:
-                break
-            if i<0 or nums1[i]<nums2[j]:
-                nums1[k]=nums2[j]
-                j-=1
-                continue
-            nums1[k]=nums1[i]
-            i-=1
-            continue
-        return
-
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        n=len(obstacleGrid)
+        m=len(obstacleGrid[0])
+        X=[0 for i in range(m+1)]
+        X[0]=1
+        print(n,m)
+        for i in range(n):
+            for j in range(m):
+                if obstacleGrid[i][j]:
+                    X[j]=0
+                X[j+1]+=X[j]
+            print(X)
+        return X[-1]
 
 
 def main():
     X = Solution()
-    A=[1,3,5,7,0,0,0]
-    B=[2,4,6]
-    X.merge(A,4,B,3)
-    print(A)
+    res=X.uniquePathsWithObstacles([[0,0,0],[0,1,0],[0,0,0]])
+    print(res)
 
 
 if __name__ == "__main__":
