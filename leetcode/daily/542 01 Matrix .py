@@ -8,7 +8,7 @@ class Solution:
         self.mat = None
 
     def isValidPlace(self,i,j):
-        return (i in range(self.n)) and (j in range(self.n))
+        return (i in range(self.n)) and (j in range(self.m))
     def getNonZero(self):
         res=[]
         for i in range(self.n):
