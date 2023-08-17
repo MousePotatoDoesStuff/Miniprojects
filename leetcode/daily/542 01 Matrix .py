@@ -31,7 +31,6 @@ class Solution:
         m=len(mat[0])
         self.n=n
         self.m=m
-        self.res=[[ for j in range(m)]for i in range(n)]
         active=self.getNonZero()
         while len(active)>0:
             new_active=[]
