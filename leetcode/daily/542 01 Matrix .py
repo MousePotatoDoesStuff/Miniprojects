@@ -10,11 +10,11 @@ class Solution:
     def isValidPlace(self,i,j):
         return (i in range(self.n)) and (j in range(self.m))
     def getNonZero(self):
-        res=[]
+        res=set()
         for i in range(self.n):
             for j in range(self.m):
                 if self.mat[i][j]!=0:
-                    res.append((i,j))
+                    res.add((i,j))
         return res
     def isFlat(self,i,j):
         ref=self.mat[i][j]
@@ -33,14 +33,13 @@ class Solution:
         self.m=m
         active=self.getNonZero()
         while len(active)>0:
-            new_active=[]
-            while len(active)>0:
-                (i,j)=active.pop()
-                if self.isFlat(i,j):
-                    new_active.append((i,j))
-            for (i,j) in new_active:
+            not_active=set()
+            for (i,j) in active:
+                if not self.isFlat(i,j):
+                    not_active.add((i,j))
+            active-=not_active
+            for (i,j) in active:
                 self.mat[i][j]+=1
-            active=new_active
         return self.mat
 
 
