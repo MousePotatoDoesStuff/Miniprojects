@@ -1,14 +1,22 @@
+from typing import List
+
+
 class Solution:
+    def __init__(self):
+        self.m = None
+        self.n = None
+        self.mat = None
+
     def isValidPlace(self,i,j):
         return (i in range(self.n)) and (j in range(self.n))
     def getNonZero(self):
-        res=set()
+        res=[]
         for i in range(self.n):
             for j in range(self.m):
                 if self.mat[i][j]!=0:
-                    res.add((i,j))
+                    res.append((i,j))
         return res
-    def isFlat(self):
+    def isFlat(self,i,j):
         ref=self.mat[i][j]
         for (di,dj) in [(0,1),(0,-1),(1,0),(-1,0)]:
             ki,kj=i+di,j+dj
@@ -24,9 +32,20 @@ class Solution:
         self.n=n
         self.m=m
         self.res=[[ for j in range(m)]for i in range(n)]
-        self.active=getNonZero()
-        while len(self.active)>0:
-            
+        active=self.getNonZero()
+        while len(active)>0:
+            new_active=[]
+            while len(active)>0:
+                (i,j)=active.pop()
+                if self.isFlat(i,j):
+                    new_active.append((i,j))
+            for (i,j) in new_active:
+                self.mat[i][j]+=1
+            active=new_active
+        return self.mat
+
+
+
 
 
 def main():
