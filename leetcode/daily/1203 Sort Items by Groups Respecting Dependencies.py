@@ -62,7 +62,7 @@ class Solution:
         RES = []
         for e in Seq:
             GD = itemDependencies[e]
-            if len(GD) == 1:
+            if e<0:
                 RES.append(-1 - e)
                 continue
             GD: dict
