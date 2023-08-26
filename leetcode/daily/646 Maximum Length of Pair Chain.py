@@ -3,6 +3,33 @@ from typing import List
 
 
 class Solution:
+    def optimizePairs(self):
+        pairs=self.pairs
+        starts = dict()
+        ends = dict()
+        nums = {}
+        for i,(a, b) in enumerate(pairs):
+            if a in starts:
+                c,d=pairs[starts[a]]
+                if d-c>a-b:
+                    ends.pop(b)
+                else:
+                    continue
+            if b in ends:
+                c,d=pairs[ends[a]]
+                if d-c>a-b:
+                    starts.pop(a)
+                else:
+                    continue
+            starts[a] = i
+            ends[b] = i
+            nums |= {a, b}
+        active=[]
+        lv=dict()
+        return
+
+
+
 
     def findLongestChain(self, pairs: List[List[int]]) -> int:
         self.pairs = pairs
@@ -21,7 +48,7 @@ class Solution:
         for e in nums:
             if e in starts:
                 f = starts[e]
-                v = 0
+                v = 1
                 for i in range(len(cur_nums)):
                     e2 = cur_nums[i]
                     if e2 >= e:
@@ -30,7 +57,8 @@ class Solution:
                 for i in range(len(cur_nums)):
                     if cur_nums[-1]<f:
                         break
-                    cur_best.pop(cur_nums.pop())
+                    v2=cur_best.pop(cur_nums.pop())
+                    v=max(v2,v)
                 cur_best[f] = v
                 cur_nums.append(f)
             if e in ends:
