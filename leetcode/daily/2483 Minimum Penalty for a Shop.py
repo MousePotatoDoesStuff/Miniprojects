@@ -18,7 +18,7 @@ class Solution:
             print(c,best)
         return best[1]
 
-    def bestClosingTime_simple(self, customers: str) -> int:
+    def bestClosingTime_simple(self, customers: str) -> int: # 104/103/95 ms
         n=len(customers)
         c=0
         best=(0,0)
