@@ -3,7 +3,7 @@ from typing import List
 
 class Solution:
     def minTaps(self, n: int, ranges: List[int]) -> int:
-        ranges=[(max(i-e,0),i+e) for (i,e) in enumerate(ranges) if e!=0]
+        ranges=[(max(i-e,0),min(i+e,n)) for (i,e) in enumerate(ranges) if e!=0]
         ranges.sort(key=lambda e:(e[0],-e[1]))
 
         j=0
