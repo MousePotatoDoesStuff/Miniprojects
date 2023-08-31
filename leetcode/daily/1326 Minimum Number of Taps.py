@@ -29,7 +29,7 @@ class Solution:
                 coverage=ranges[i][1]
         if coverage<n:
             return -1
-        return len(ranges)
+        return count
 
 
 def main():
