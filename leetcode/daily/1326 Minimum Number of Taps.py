@@ -18,26 +18,23 @@ class Solution:
         print(ranges,j,n)
         last_coverage=-1
         coverage=0
-        j=0
+        count=0
         for i in range(len(ranges)):
             if ranges[i][0]>coverage:
                 return -1
             if coverage<ranges[i][1]:
                 if last_coverage<ranges[i][0]:
-                    j+=1
+                    count+=1
                     last_coverage=coverage
-                ranges[j]=ranges[i]
                 coverage=ranges[i][1]
         if coverage<n:
             return -1
-        for i in range(j,len(ranges)):
-            ranges.pop()
         return len(ranges)
 
 
 def main():
-    ranges=[3,4,1,1,0,0]
-    res=Solution().minTaps(5,ranges)
+    ranges=[4,0,0,0,0,0,0,0,4]
+    res=Solution().minTaps(len(ranges)-1,ranges)
     print(res)
     return
 
