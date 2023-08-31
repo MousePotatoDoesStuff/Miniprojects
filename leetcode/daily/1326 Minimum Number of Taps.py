@@ -5,6 +5,8 @@ class Solution:
     def minTaps(self, n: int, ranges: List[int]) -> int:
         ranges=[(max(i-e,0),min(i+e,n)) for (i,e) in enumerate(ranges) if e!=0]
         ranges.sort(key=lambda e:(e[0],-e[1]))
+        if len(ranges)==0:
+            return -1
 
         L=[ranges[0]]
         last=-1
