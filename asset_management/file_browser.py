@@ -1,5 +1,6 @@
 import codecs
 import os
+import Miniprojects.private_input_management as PrivateInput
 
 
 class FileBrowser:
@@ -31,14 +32,20 @@ def create_endswith_checker(substring):
 
 
 def main():
-    root = input("->")
-    X = FileBrowser(root)
-    text = 'TEXT'
-    while len(text) > 0:
-        text = input("->")
-        for e in X.iterate_files(create_endswith_checker('.rpy'), lambda X: text in X):
-            print("->", e)
-    return
+    while True:
+        root = input("Directory:")
+        if len(root) == 0:
+            D = {}
+            PrivateInput.get_private_inputs(D)
+            root = D["fb_testdir"]
+        X = FileBrowser(root)
+        text = 'TEXT'
+        print("Directory:",root)
+        while len(text) > 0:
+            text = input("Text:")
+            for e in X.iterate_files(create_endswith_checker('.rpy'), lambda X: text in X):
+                print("->", e)
+            print("Complete.")
 
 
 if __name__ == "__main__":
