@@ -35,15 +35,16 @@ class Solution:
             if len(self.words[word]) == diff:
                 if diff==1:
                     print('???')
-                state.last = ind
                 if self.null.comp(state) > 0:
-                    self.null = state
+                    state.word=-1
+                    self.null = State(state.count,-1,ind)
                 continue
             if char == self.words[word][diff]:
                 new_states.append(state)
         states=new_states
         a = self.null.count + ind - self.null.last
         for word in self.begins.get(char, []):
+            print(a,word,ind)
             self.states.append(State(a, word, ind))
         return
 
