@@ -57,11 +57,11 @@ class Solution:
         self.states[-1] = State()
         for (i, e) in enumerate(s):
             self.step(i, e)
-        return self.states[-1].count+i-1-self.states[-1].last
+        return self.states[-1].count+i-self.states[-1].last
 
 
 def main():
-    s="leetscodes"
+    s="leetscode"
     L=["leet","code","leetcode"]
     res=Solution().minExtraChar(s,L)
     print(res)
