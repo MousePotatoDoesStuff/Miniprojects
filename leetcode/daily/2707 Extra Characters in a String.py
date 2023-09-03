@@ -1,52 +1,22 @@
+from collections import deque
 from typing import List
 
 
-class State:
-    def __init__(self, count=0, word=-1, last=0):
-        self.count = count
+class Word:
+    def __init__(self,word,best,start):
         self.word = word
-        self.last = last
+        self.best = best
+        self.start = start
         return
-
-    def comp(self, other):
-        other: State
-        a = self.count - self.last
-        b = other.count - other.last
-        return int(a > b) - int(a < b)
-
     def __str__(self):
-        return "{}:{}->{}".format(self.word, self.last, self.count)
+        return str((self.word,self.best,self.start))
 
 
 class Solution:
-    def __init__(self):
-        self.words = []
-        self.begins = dict()
-        self.null = State()
-        self.states: List[State] = []
-        return
 
-    def step(self, ind, char):
-        new_states = []
-        while len(self.states) != 0:
-            state = self.states.pop()
-            word = state.word
-            diff = ind - state.last
-            if len(self.words[word]) == diff:
-                if diff==1:
-                    print('???')
-                if self.null.comp(state) > 0:
-                    state.word=-1
-                    self.null = State(state.count,-1,ind)
-                continue
-            if char == self.words[word][diff]:
-                new_states.append(state)
-        states=new_states
-        a = self.null.count + ind - self.null.last
-        for word in self.begins.get(char, []):
-            print(a,word,ind)
-            self.states.append(State(a, word, ind))
-        return
+    def __init__(self):
+        self.words = None
+        self.begins = None
 
     def minExtraChar(self, s: str, dictionary: List[str]) -> int:
         s += ' '
@@ -54,14 +24,31 @@ class Solution:
         self.begins = {e[0]: set() for e in self.words}
         for i, e in enumerate(dictionary):
             self.begins[e[0]].add(i)
-        self.null = State()
-        for (i, e) in enumerate(s):
-            self.step(i, e)
-        print(self.null.count,len(s) - 1,self.null.last)
-        return self.null.count + len(s) - 1 - self.null.last
-
+        self.best = 0
+        log=deque()
+        for i, e in enumerate(s):
+            new_words=deque()
+            while len(log)>0:
+                cur=log.popleft()
+                cur:Word
+                word=self.words[cur.word]
+                if cur.start+len(word)==i:
+                    self.best=max(self.best,cur.best+len(word))
+                    continue
+                if word[i-cur.start]==e:
+                    new_words.append(cur)
+            for word in self.begins.get(e,[]):
+                new_words.append(Word(word,self.best,i))
+            log=new_words
+            print(self.best,[str(s) for s in log])
+        return len(s)-self.best-1
 
 def main():
+    s = "leetscode".replace(' ','')
+    print(len(s))
+    L = ["leet","code","leetcode"]
+    res = Solution().minExtraChar(s, L)
+    print(res)
     s = "voctv ochpg  utoyw pnafy  lzelq snzsb  andjc qdciy  oefi".replace(' ','')
     print(len(s))
     L = ["tf", "v", "wadrya", "a", "cqdci", "uqfg", "voc", "zelqsn", "band", "b", "yoefi", "utoywp", "herqqn", "umra",
