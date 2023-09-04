@@ -1,0 +1,39 @@
+SQR5=5.0**0.5
+
+
+def CalculateSequence(C,R,p,rl=3):
+    n=min(len(C),len(R))
+    res=0
+    for i in range(n):
+        res+=C[i]*(R[i]**p)
+    return round(res,rl)
+
+
+def test1():
+    a=(1+SQR5)/2
+    b=(1-SQR5)/2
+    C=[1.0/SQR5,-1.0/SQR5]
+    R=[a,b]
+    print([CalculateSequence(C,R,i)for i in range(10)])
+    return
+
+
+def test2():
+    a=(1+SQR5)/2
+    b=(1-SQR5)/2
+    C=[a**2/SQR5,-b**2/SQR5,-1]
+    R=[a,b,1]
+    print([int(CalculateSequence(C,R,i)) for i in range(10)])
+    print(int(CalculateSequence(C, R, 20)))
+
+    return
+
+
+def main():
+    test1()
+    test2()
+    return
+
+
+if __name__ == "__main__":
+    main()
