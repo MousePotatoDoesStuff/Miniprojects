@@ -29,31 +29,23 @@ class Solution(object):
         connSum = 0
         while len(connections) > 0:
             h, i, j = connections.pop()
-            print(h, i, j, groups, end="|")
             self.groupShorten(groups, i)
             self.groupShorten(groups, j)
-            print(groups, end="|")
+            print(groups)
             if groups[i] == groups[j]:
-                print("NO", i, j)
                 continue
-            m = len([i for i in range(n) if groups[i] == i])
             groups[groups[j]] = groups[i]
             groups[j] = groups[i]
             connSum += h
-            m2 = len([i for i in range(n) if groups[i] == i])
-            if m != m2:
-                print(h, i, j, (m, m2), groups)
-            else:
-                print(h, i, j)
+            print(h,groups)
         return connSum
 
 
 def main():
     S = Solution()
-    GR = [0, 0, 1, 2, 3, 4]
-    for i in range(5, -1, -1):
-        S.groupShorten(GR, i)
-        print(GR)
+    GR = [[0,0],[2,2],[3,10],[5,2],[7,0]]
+    res=S.minCostConnectPoints(GR)
+    print(res)
     return
 
 
