@@ -24,20 +24,17 @@ class Solution(object):
                 h = abs(A[0] - B[0]) + abs(A[1] - B[1])
                 connections.append((h, i, j))
         connections.sort(reverse=True)
-        print(connections)
         groups = [i for i in range(n)]
         connSum = 0
         while len(connections) > 0:
             h, i, j = connections.pop()
             self.groupShorten(groups, i)
             self.groupShorten(groups, j)
-            print(groups)
             if groups[i] == groups[j]:
                 continue
             groups[groups[j]] = groups[i]
             groups[j] = groups[i]
             connSum += h
-            print(h,groups)
         return connSum
 
 
