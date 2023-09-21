@@ -13,7 +13,7 @@ class Solution(object):
     def __init__(self):
         self.extras = []
 
-    def findMedian(self, L, delta=0, start=0, end=-1, get_indices=False):
+    def findMedian(self, L, delta=0, start=0, end=-1, get_indices=False, alt=0):
         end = EndList(end, L)
         n = end - start + abs(delta)
         half = (n - 1) // 2
@@ -23,7 +23,8 @@ class Solution(object):
         other = half if n & 1 else half + 1
         if get_indices:
             self.extras.append((half, other))
-        return L[half] if half == other else (L[half] + L[other]) / 2
+        vother= L[other] if other in range(start,end) else alt
+        return L[half] if half == other else (L[half] + vother) / 2
 
     def findGroupStartOverlap(self, nums1, nums2, start1, start2):
         A1 = nums1[start1]
@@ -85,9 +86,9 @@ class Solution(object):
             n += delta
             while delta <= n - delta:
                 if start1 == end1:
-                    return self.findMedian(nums2, delta, start2, end2)
+                    return self.findMedian(nums2, -delta, start2, end2, alt=last)
                 if start2 == end2:
-                    return self.findMedian(nums1, delta, start1, end1)
+                    return self.findMedian(nums1, -delta, start1, end1, alt=last)
                 a = nums1[start1]
                 b = nums2[start2]
                 if a > b:
@@ -106,9 +107,9 @@ class Solution(object):
             n += delta
             while delta <= n - delta:
                 if start1 == end1:
-                    return self.findMedian(nums2, -delta, start2, end2)
+                    return self.findMedian(nums2, delta, start2, end2, alt=last)
                 if start2 == end2:
-                    return self.findMedian(nums1, delta, start1, end1)
+                    return self.findMedian(nums1, delta, start1, end1, alt=last)
                 a = nums1[end1 - 1]
                 b = nums2[end2 - 1]
                 if a < b:
@@ -172,9 +173,9 @@ class Solution(object):
 
 def main():
     sol = Solution()
-    A = [0,0]
-    B = [0,0]
-    res = sol.findMedianSortedArrays(A, B)
+    nums1 =[0, 0, 0, 0, 0]
+    nums2 =[-1, 0, 0, 0, 0, 0, 1]
+    res = sol.findMedianSortedArrays(nums1,nums2)
     # res = sol.(A, B, 0, 0, len(A), len(B), 0)
     print(res)
     return
