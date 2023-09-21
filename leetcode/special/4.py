@@ -11,6 +11,8 @@ class Solution(object):
         if get_indices:
             self.extras.append((self,other))
         return L[half] if half==other else (L[half]+L[other])/2
+    def findMedianOverlap(self, nums1, nums2):
+
     def findMedianSortedArrays(self, nums1, nums2):
         """
         :type nums1: List[int]
