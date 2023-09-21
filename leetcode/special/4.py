@@ -6,7 +6,7 @@ class Solution(object):
         n=len(L)+abs(delta)
         half=(n-1)//2
         if delta<0:
-            half-=delta
+            half+=delta
         other=half if n&1 else half+1
         if get_indices:
             self.extras.append((self,other))
@@ -21,8 +21,9 @@ class Solution(object):
 
 def main():
     sol=Solution()
-    print(sol.findMedian([1,4,5,7,22]))
-    print(sol.findMedian([1,4,5,7,22,69,420,1337]))
+    d=-2
+    print(sol.findMedian([1,4,5,7,22],d))
+    print(sol.findMedian([1,4,5,7,22,69,420,1337],d))
     return
 
 
