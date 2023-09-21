@@ -155,25 +155,25 @@ class Solution(object):
             else:
                 delta = len(nums2)
             return self.findMedian(nums1, delta)
-        start1, start2 = s_ov
-        end1, end2 = e_ov
         delta = 0
+        new1=s_ov[0],e_ov[0]
+        new2=s_ov[1],e_ov[1]
         while True:
+            delta += sum(new1) + sum(new2)
+            delta -= start1 + start2 + end1 + end2
+            start1, end1 = new1
+            start2, end2 = new2
             len1 = end1 - start1
             len2 = end2 - start2
             if max(len1, len2) < 4:
                 return self.medianFinisher(nums1, nums2, start1, start2, end1, end2, delta)
             else:
                 new1, new2 = self.medianSplit(nums1, nums2, start1, start2, end1, end2, delta)
-                delta += sum(new1) + sum(new2)
-                delta -= start1 + start2 + end1 + end2
-                start1, end1 = new1
-                start2, end2 = new2
 
 
 def main():
     sol = Solution()
-    nums1 =[1,2]
+    nums1 =[1,1]
     nums2 =[1,2]
     res = sol.findMedianSortedArrays(nums1,nums2)
     # res = sol.(A, B, 0, 0, len(A), len(B), 0)
