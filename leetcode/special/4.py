@@ -79,7 +79,7 @@ class Solution(object):
         return (start1, end1), (start2, end2)
 
     def medianFinisher(self, nums1, nums2, start1, start2, end1, end2, delta=0):
-        n = len(nums1) + len(nums2)
+        n = end1+end2-start1-start2
         last = None
         if delta < 0:
             delta *= -1
@@ -159,8 +159,8 @@ class Solution(object):
         new1=s_ov[0],e_ov[0]
         new2=s_ov[1],e_ov[1]
         while True:
-            delta += sum(new1) + sum(new2)
-            delta -= start1 + start2 + end1 + end2
+            delta -= sum(new1) + sum(new2)
+            delta += start1 + start2 + end1 + end2
             start1, end1 = new1
             start2, end2 = new2
             len1 = end1 - start1
@@ -173,8 +173,8 @@ class Solution(object):
 
 def main():
     sol = Solution()
-    nums1 =[1,1]
-    nums2 =[1,2]
+    nums1 =[1,2]
+    nums2 =[1,2,3]
     res = sol.findMedianSortedArrays(nums1,nums2)
     # res = sol.(A, B, 0, 0, len(A), len(B), 0)
     print(res)
