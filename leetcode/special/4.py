@@ -25,7 +25,7 @@ class Solution(object):
             self.extras.append((half, other))
         return L[half] if half == other else (L[half] + L[other]) / 2
 
-    def findGroupStartOverlap(self, nums1, nums2, start1, start2, end1, end2):
+    def findGroupStartOverlap(self, nums1, nums2, start1, start2):
         A1 = nums1[start1]
         A2 = nums2[start2]
         res1 = start1
@@ -36,7 +36,7 @@ class Solution(object):
             res2 = bisect(nums2, A1)
         return res1, res2
 
-    def findGroupEndOverlap(self, nums1, nums2, start1, start2, end1, end2):
+    def findGroupEndOverlap(self, nums1, nums2, end1, end2):
         B1 = nums1[end1 - 1]
         B2 = nums2[end2 - 1]
         res1 = end1
@@ -56,16 +56,16 @@ class Solution(object):
             end1, end2 = end2, end1
         if nums1[end1 - 1] < nums2[start2]:
             return None, swc
-        start_overlap = self.findGroupStartOverlap(nums1, nums2, start1, start2, end1, end2)
-        end_overlap = self.findGroupEndOverlap(nums1, nums2, start1, start2, end1, end2)
+        start_overlap = self.findGroupStartOverlap(nums1, nums2, start1, start2)
+        end_overlap = self.findGroupEndOverlap(nums1, nums2, end1, end2)
         return SwapIf(start_overlap, swc), SwapIf(end_overlap, swc)
 
     def medianSplit(self, nums1, nums2, start1, start2, end1, end2, delta=0):
-        self.findMedian(nums1, delta, start1, end1, True)
+        mid_1 = self.findMedian(nums1, delta, start1, end1, True)
         med_a1, med_b1 = self.extras.pop()
-        self.findMedian(nums2, delta, start2, end2, True)
+        mid_2 = self.findMedian(nums2, delta, start2, end2, True)
         med_a2, med_b2 = self.extras.pop()
-        diff = nums2[med_a2] - nums1[med_a1]
+        diff = mid_2 - mid_1
         if diff >= 0:
             start1 = med_a1
         if diff <= 0:
@@ -136,20 +136,48 @@ class Solution(object):
         start2 = 0
         end1 = len(nums1)
         end2 = len(nums2)
+        if 0 in (end1, end2):
+            if end1 == 0:
+                nums1 = nums2
+            return self.findMedian(nums1)
         s_ov, e_ov = self.findGroupOverlap(nums1, nums2, start1, start2, end1, end2)
         if s_ov is None:
             if e_ov:
                 nums1, nums2 = nums2, nums1
                 start1, start2 = start2, start1
                 end1, end2 = end2, end1
+            d = len(nums2) - len(nums1)
+            if d == 0:
+                return (nums1[-1] + nums2[0])
+            if d > 0:
+                delta = -len(nums1)
+                nums1 = nums2
+            else:
+                delta = len(nums2)
+            return self.findMedian(nums1, delta)
+        start1, start2 = s_ov
+        end1, end2 = e_ov
+        delta = 0
+        while True:
+            len1 = end1 - start1
+            len2 = end2 - start2
+            if max(len1, len2) < 8:
+                return self.medianFinisher(nums1, nums2, start1, start2, end1, end2, delta)
+            else:
+                new1, new2 = self.medianSplit(nums1, nums2, start1, start2, end1, end2, delta)
+                delta += sum(new1) + sum(new2)
+                delta -= start1 + start2 + end1 + end2
+                start1, end1 = new1
+                start2, end2 = new2
 
 
 def main():
     sol = Solution()
-    A = [1, 2, 3, 3.5, 5]
+    A = [0, 1, 2, 3, 3.5, 5]
     B = [3, 4.5, 5, 6, 7]
-    res=sol.medianSplit(A, B, 0, 0, len(A), len(B), 0)
-    # res = sol.medianFinisher(A, B, 0, 0, len(A)-1, len(B), 0)
+    # A = [e + 10 for e in A]
+    res = sol.findMedianSortedArrays(A, B)
+    # res = sol.(A, B, 0, 0, len(A), len(B), 0)
     print(res)
     return
 
