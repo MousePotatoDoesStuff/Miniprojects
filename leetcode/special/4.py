@@ -22,7 +22,7 @@ class Solution(object):
             half += delta
         other = half if n & 1 else half + 1
         if get_indices:
-            self.extras.append((self, other))
+            self.extras.append((half, other))
         return L[half] if half == other else (L[half] + L[other]) / 2
 
     def findGroupStartOverlap(self, nums1, nums2, start1, start2, end1, end2):
@@ -61,9 +61,9 @@ class Solution(object):
         return SwapIf(start_overlap, swc), SwapIf(end_overlap, swc)
 
     def medianSplit(self, nums1, nums2, start1, start2, end1, end2, delta=0):
-        A1, B1 = self.findMedian(nums1, delta, start1, end1, True)
+        self.findMedian(nums1, delta, start1, end1, True)
         med_a1, med_b1 = self.extras.pop()
-        A2, B2 = self.findMedian(nums2, delta, start2, end2, True)
+        self.findMedian(nums2, delta, start2, end2, True)
         med_a2, med_b2 = self.extras.pop()
         diff = nums2[med_a2] - nums1[med_a1]
         if diff >= 0:
@@ -102,7 +102,6 @@ class Solution(object):
                 else:
                     last = cur
                 delta += 1
-                print(last)
         else:
             n += delta
             while delta <= n - delta:
@@ -124,8 +123,8 @@ class Solution(object):
                 else:
                     last = cur
                 delta += 1
-                print(last)
-        print(start1, start2, end1, end2, (n, delta), last)
+        return last
+        # print(start1, start2, end1, end2, (n, delta), last)
 
     def findMedianSortedArrays(self, nums1, nums2):
         """
@@ -149,7 +148,8 @@ def main():
     sol = Solution()
     A = [1, 2, 3, 3.5, 5]
     B = [3, 4.5, 5, 6, 7]
-    res = sol.medianFinisher(A, B, 0, 0, 5, 5, 2)
+    res=sol.medianSplit(A, B, 0, 0, len(A), len(B), 0)
+    # res = sol.medianFinisher(A, B, 0, 0, len(A)-1, len(B), 0)
     print(res)
     return
 
