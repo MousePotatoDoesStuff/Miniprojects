@@ -23,7 +23,7 @@ class Solution(object):
         other = half if n & 1 else half + 1
         if get_indices:
             self.extras.append((half, other))
-        vother= L[other] if other in range(start,end) else alt
+        vother= 1.0*(L[other] if other in range(start,end) else alt)
         return L[half] if half == other else (L[half] + vother) / 2.0
 
     def findGroupStartOverlap(self, nums1, nums2, start1, start2):
@@ -33,7 +33,7 @@ class Solution(object):
         res2 = start2
         if A1 <= A2:
             res1 = bisect.bisect_left(nums1, A2)
-        if A2 >= A1:
+        if A2 <= A1:
             res2 = bisect.bisect_left(nums2, A1)
         return res1, res2
 
@@ -44,7 +44,7 @@ class Solution(object):
         res2 = end2
         if B1 >= B2:
             res1 = bisect.bisect_right(nums1, B2)
-        if B2 > B1:
+        if B2 >= B1:
             res2 = bisect.bisect_right(nums2, B1)
         return res1, res2
 
@@ -80,7 +80,7 @@ class Solution(object):
 
     def medianFinisher(self, nums1, nums2, start1, start2, end1, end2, delta=0):
         n = end1+end2-start1-start2
-        last = None
+        last = 420.69
         if delta < 0:
             delta *= -1
             n += delta
@@ -158,6 +158,11 @@ class Solution(object):
         delta = 0
         new1=s_ov[0],e_ov[0]
         new2=s_ov[1],e_ov[1]
+        last=69.420
+        if new2[1]!=end2:
+            last=nums2[new2[1]]
+        if new1[1]!=end1:
+            last=nums1[new1[1]]
         while True:
             delta -= sum(new1) + sum(new2)
             delta += start1 + start2 + end1 + end2
@@ -165,6 +170,10 @@ class Solution(object):
             start2, end2 = new2
             len1 = end1 - start1
             len2 = end2 - start2
+            if 0 in (len1, len2):
+                if len1 == 0:
+                    return self.findMedian(nums2,delta,start2,end2,alt=last)
+                return self.findMedian(nums1,delta,start1,end1,alt=last)
             if max(len1, len2) < 4:
                 return self.medianFinisher(nums1, nums2, start1, start2, end1, end2, delta)
             else:
@@ -173,8 +182,8 @@ class Solution(object):
 
 def main():
     sol = Solution()
-    nums1 =[1,2]
-    nums2 =[1,2,3]
+    nums1 =[1,3]
+    nums2 =[2]
     res = sol.findMedianSortedArrays(nums1,nums2)
     # res = sol.(A, B, 0, 0, len(A), len(B), 0)
     print(res)
