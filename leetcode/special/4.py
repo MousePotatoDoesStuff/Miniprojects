@@ -148,7 +148,7 @@ class Solution(object):
                 end1, end2 = end2, end1
             d = len(nums2) - len(nums1)
             if d == 0:
-                return (nums1[-1] + nums2[0])/2
+                return (nums1[-1] + nums2[0])/2.0
             if d > 0:
                 delta = -len(nums1)
                 nums1 = nums2
