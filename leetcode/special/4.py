@@ -23,7 +23,8 @@ class Solution(object):
         other = half if n & 1 else half + 1
         if get_indices:
             self.extras.append((half, other))
-        vother= 1.0*(L[other] if other in range(start,end) else alt)
+        vhalf=1.0*(L[half] if half!=-1 else alt)
+        vother= 1.0*(L[other] if other!=end else alt)
         return L[half] if half == other else (L[half] + vother) / 2.0
 
     def findGroupStartOverlap(self, nums1, nums2, start1, start2):
@@ -171,6 +172,8 @@ class Solution(object):
             len1 = end1 - start1
             len2 = end2 - start2
             if 0 in (len1, len2):
+                if delta+len1+len2==0:
+                    last=nums1[start1-1] if start1>0 else nums2[start2-1]
                 if len1 == 0:
                     return self.findMedian(nums2,delta,start2,end2,alt=last)
                 return self.findMedian(nums1,delta,start1,end1,alt=last)
@@ -182,11 +185,15 @@ class Solution(object):
 
 def main():
     sol = Solution()
-    nums1 =[1,3]
-    nums2 =[2]
-    res = sol.findMedianSortedArrays(nums1,nums2)
-    # res = sol.(A, B, 0, 0, len(A), len(B), 0)
-    print(res)
+    combs={
+        0:([1,3],[2]),
+        1:([3],[1,2,4]),
+        -1:([1],[1])
+    }
+    for e in [0,1]:
+        (nums1,nums2)=combs[e]
+        res = sol.findMedianSortedArrays(nums1,nums2)
+        print(res)
     return
 
 
