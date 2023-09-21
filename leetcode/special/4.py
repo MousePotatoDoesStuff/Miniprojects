@@ -1,8 +1,8 @@
 from bisect import bisect
 
 
-def EndList(n,l):
-    return n if n>=0 else len()
+def EndList(n,L):
+    return n if n>=0 else len(L)
 
 
 class Solution(object):
@@ -20,6 +20,20 @@ class Solution(object):
         if get_indices:
             self.extras.append((self,other))
         return L[half] if half==other else (L[half]+L[other])/2
+    def findFirst(self, nums1, nums2, start1=0, start2=0, end1=-1, end2=-1):
+        end1=EndList(end1,nums1)
+        end2=EndList(end2,nums2)
+        A1=nums1[start1]
+        A2=nums2[start2]
+        swc=False
+        if A1>A2:
+            swc=True
+            nums1,nums2=nums2,nums1
+            start1,start2=start2,start1
+            end1,end2=end2,end1
+            A1,A2=A2,A1
+        B1=nums1[end1-1]
+        B2=nums2[end2-1]
     def findGroupStartOverlap(self, nums1, nums2, start1=0, start2=0, end1=-1, end2=-1):
         end1=EndList(end1,nums1)
         end2=EndList(end2,nums2)
@@ -32,8 +46,8 @@ class Solution(object):
             start1,start2=start2,start1
             end1,end2=end2,end1
             A1,A2=A2,A1
-        B1=nums1[end1]
-        B2=nums2[end2]
+        B1=nums1[end1-1]
+        B2=nums2[end2-1]
         if B1<=A2:
             return None,swc
         res1 = start1
@@ -53,9 +67,10 @@ class Solution(object):
 
 def main():
     sol=Solution()
-    d=3
-    print(sol.findMedian([1,4,5,7,22],d,1,4))
-    print(sol.findMedian([1,4,5,7,22,69,420,1337],d,1,7))
+    A=[1,2,3,4,5]
+    B=[3,4,5,6,7]
+    res=sol.findGroupStartOverlap(A,B)
+    print(res)
     return
 
 
