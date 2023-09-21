@@ -31,9 +31,9 @@ class Solution(object):
         res1 = start1
         res2 = start2
         if A1 <= A2:
-            res1 = bisect.bisect(nums1, A2)
+            res1 = bisect.bisect_left(nums1, A2)
         if A2 >= A1:
-            res2 = bisect.bisect(nums2, A1)
+            res2 = bisect.bisect_left(nums2, A1)
         return res1, res2
 
     def findGroupEndOverlap(self, nums1, nums2, end1, end2):
@@ -106,7 +106,7 @@ class Solution(object):
             n += delta
             while delta <= n - delta:
                 if start1 == end1:
-                    return self.findMedian(nums2, delta, start2, end2)
+                    return self.findMedian(nums2, -delta, start2, end2)
                 if start2 == end2:
                     return self.findMedian(nums1, delta, start1, end1)
                 a = nums1[end1 - 1]
@@ -124,7 +124,6 @@ class Solution(object):
                     last = cur
                 delta += 1
         return last
-        # print(start1, start2, end1, end2, (n, delta), last)
 
     def findMedianSortedArrays(self, nums1, nums2):
         """
@@ -173,9 +172,8 @@ class Solution(object):
 
 def main():
     sol = Solution()
-    A = [0, 1, 2, 3, 3.5, 5]
-    B = [3, 4.5, 5, 6, 7]
-    # A = [e + 10 for e in A]
+    A = [0,0]
+    B = [0,0]
     res = sol.findMedianSortedArrays(A, B)
     # res = sol.(A, B, 0, 0, len(A), len(B), 0)
     print(res)
