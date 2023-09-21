@@ -63,7 +63,7 @@ class Solution(object):
     def medianSplit(self, nums1, nums2, start1, start2, end1, end2, delta=0):
         self.findMedian(nums1,delta,start1,end1,True)
         med_a1,med_b1=self.extras.pop()
-        self.findMedian(nums1,delta,start1,end1,True)
+        self.findMedian(nums2,delta,start2,end2,True)
         med_a2,med_b2=self.extras.pop()
         diff=nums2[med_a2]-nums1[med_a1]
         if diff>=0:
