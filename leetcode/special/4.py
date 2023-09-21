@@ -1,4 +1,4 @@
-from bisect import bisect, bisect_right
+import bisect
 
 
 def EndList(n, L):
@@ -31,9 +31,9 @@ class Solution(object):
         res1 = start1
         res2 = start2
         if A1 <= A2:
-            res1 = bisect(nums1, A2)
+            res1 = bisect.bisect(nums1, A2)
         if A2 >= A1:
-            res2 = bisect(nums2, A1)
+            res2 = bisect.bisect(nums2, A1)
         return res1, res2
 
     def findGroupEndOverlap(self, nums1, nums2, end1, end2):
@@ -42,9 +42,9 @@ class Solution(object):
         res1 = end1
         res2 = end2
         if B1 >= B2:
-            res1 = bisect_right(nums1, B2)
+            res1 = bisect.bisect_right(nums1, B2)
         if B2 > B1:
-            res2 = bisect_right(nums2, B1)
+            res2 = bisect.bisect_right(nums2, B1)
         return res1, res2
 
     def findGroupOverlap(self, nums1, nums2, start1, start2, end1, end2):
