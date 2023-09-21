@@ -61,12 +61,21 @@ class Solution(object):
         return SwapIf(start_overlap, swc), SwapIf(end_overlap, swc)
 
     def medianSplit(self, nums1, nums2, start1, start2, end1, end2, delta=0):
-        med_a1=(end1+start1-1)//2
-        med_b1=(end1+start1)//2
-        med_a2=(end2+start2-1)//2
-        med_b2=(end2+start2)//2
-        
-
+        self.findMedian(nums1,delta,start1,end1,True)
+        med_a1,med_b1=self.extras.pop()
+        self.findMedian(nums1,delta,start1,end1,True)
+        med_a2,med_b2=self.extras.pop()
+        diff=nums2[med_a2]-nums1[med_a1]
+        if diff>=0:
+            start1=med_a1
+        if diff<=0:
+            start2=med_a2
+        diff=nums2[med_b2]-nums1[med_b1]
+        if diff<=0:
+            end1=med_b1+1
+        if diff>=0:
+            end2=med_b2+1
+        return (start1,end1),(start2,end2)
 
     def findMedianSortedArrays(self, nums1, nums2):
         """
