@@ -77,10 +77,9 @@ class StrTree:
             refNode: StrTreeNode
             if (status!="") and (thisNode.value is not None) and (refNode.value is not None):
                 v=refNode.value[0]+1
-                if v!=targetLen:
+                if v==targetLen:
+                    res.append((thisNode.value, refNode.value[0] + 1))
                     continue
-                res.append((thisNode.value, refNode.value[0] + 1))
-                continue
             if len(nexts) == 0:
                 continue
             for nxt in nexts:
@@ -113,7 +112,7 @@ class Solution:
             curlen = lens.pop()
             valid = STR.getValid(currents,curlen)
             currents = StrTree(None)
-            for (v, i) in valid:
+            for (i, v) in valid:
                 e = words[i]
                 currents.append(e, (v, i))
         return 0
