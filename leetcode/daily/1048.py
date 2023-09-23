@@ -103,15 +103,16 @@ class Solution:
             lens.add(n)
         lens = list(lens)
         lens.sort(reverse=True)
-        currents = {0: [""]}
+        currents = {0: StrTree(0)}
         while len(lens) > 0:
             curlen = lens.pop()
+            curRef = D[]
         return 0
 
 
 def main():
     SOL = Solution()
-    S = 'AAA ABC ADE'
+    S = 'B AC BC ABC ADE'
     L = S.split()
     res = SOL.longestStrChain(L)
     return
