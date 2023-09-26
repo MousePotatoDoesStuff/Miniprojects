@@ -3,23 +3,17 @@ import bisect
 
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
-        letters = list(set(s))
-        letters.sort()
-        locations = {e: [] for e in letters}
-        for i, e in enumerate(s):
-            locations[e].append(i)
-        res = []
-        last = -1
-        for e in letters:
-            L = locations.pop(e)
-            i = bisect.bisect(L, last)
-            L.append(L[-1])
-            loc= L[i]
-            res.append((loc, e))
-            last = max(last, loc)
-        print(res)
-        res.sort()
-        return "".join([e[1] for e in res])
+        L=[]
+        seen=set()
+        last_dict={e:i for i,e in enumerate(s)}
+        for i,e in enumerate(s):
+            if e in seen:
+                continue
+            while L and e<L[-1] and i<last_dict[L[-1]]:
+                seen.discard(L.pop())
+            seen.add(e)
+            L.append(e)
+        return "".join(L)
 
 
 def main():
