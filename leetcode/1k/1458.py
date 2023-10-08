@@ -58,9 +58,9 @@ class Solution:
             return best
         best=0
         if plus1 and plus2:
-            best=max(best,self.maxDotProductPositive(plus1,plus2))
+            best+=self.maxDotProductPositive(plus1,plus2)
         if minus1 and minus2:
-            best=max(best,self.maxDotProductPositive(minus1,minus2))
+            best+=self.maxDotProductPositive(minus1,minus2)
         return best
 
 
