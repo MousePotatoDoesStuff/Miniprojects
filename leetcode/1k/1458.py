@@ -57,7 +57,7 @@ class Solution:
         if b2 < 0 < a1:
             if zero1 or zero2:
                 return 0
-            return b1*a2
+            return b2*a1
         return self.maxDotProductPositive(nums1,nums2)
 
 
