@@ -41,10 +41,10 @@ class Solution:
         self.n=self.marr.length()
         A=self.enumCall(0)
         B=self.enumCall(self.n-1)
-        if A[1]>=target:
-            return int(A[1]==target)-1
-        if B[1]>=target:
-            return [-1,self.n-1][B[1]==target]
+        if A[1]==target:
+            return 0
+        if B[1]==target:
+            return self.n-1
         C=None
         D=None
         lastA=(-1,-1)
@@ -98,9 +98,9 @@ class Solution:
         return res2
 
 def main():
-    MONT=MountainArray([1,2,3,4,5,3,1]) # [0,1,2,4,2,1]
+    MONT=MountainArray([3,5,3,2,0])
     SOL=Solution()
-    res=SOL.findInMountainArray(2,MONT)
+    res=SOL.findInMountainArray(0,MONT)
     print(res)
     return
 
