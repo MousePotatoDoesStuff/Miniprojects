@@ -18,7 +18,6 @@ class Solution:
         if k not in range(self.n):
             return (k,-1)
         E=(k,self.marr.get(k))
-        print(E)
         return E
     def BinSearch(self,A,B,target,reverse):
         if B[1]==target:
@@ -29,12 +28,14 @@ class Solution:
         while B[0]-A[0]>1:
             C=self.enumCall((A[0]+B[0])//2)
             d=C[1]-target
+            print(A,C,B,d,(d>0)^reverse)
             if d==0:
                 return C[0]
-            if (d>0)^reverse:
+            if (d<0)^reverse:
                 A=(C[0]+1,-3)
             else:
                 B=(C[0],-3)
+        C=self.enumCall((A[0]+B[0])//2)
         return C[0] if C[1]==target else -1
     def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
         self.marr=mountain_arr
@@ -90,6 +91,7 @@ class Solution:
         if None in (limA,limB):
             print("NONE:",lastA,limA,limB,lastB)
             return A[0] if A[1]==target else -1
+        print("Range:",lastA,limA,limB,lastB)
         res1=self.BinSearch(lastA,limA,target,False)
         if res1>=0:
             return res1
