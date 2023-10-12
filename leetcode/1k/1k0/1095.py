@@ -43,12 +43,10 @@ class Solution:
         B=self.enumCall(self.n-1)
         if A[1]==target:
             return 0
-        if B[1]==target:
-            return self.n-1
         C=None
         D=None
-        lastA=(-1,-1)
-        lastB=(-1,-1)
+        lastA=A
+        lastB=B
         limA=None
         limB=None
         while B[0]-A[0]>1:
@@ -90,7 +88,8 @@ class Solution:
             if None not in (limA,limB):
                 break
         if None in (limA,limB):
-            return -11
+            print("NONE:",lastA,limA,limB,lastB)
+            return A[0] if A[1]==target else -1
         res1=self.BinSearch(lastA,limA,target,False)
         if res1>=0:
             return res1
