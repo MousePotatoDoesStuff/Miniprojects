@@ -26,7 +26,7 @@ class Solution:
         if A[1]==target:
             return A[0]
         C=A
-        while A[0]-B[0]>1:
+        while B[0]-A[0]>1:
             C=self.enumCall((A[0]+B[0])//2)
             d=C[1]-target
             if d==0:
@@ -58,12 +58,11 @@ class Solution:
                 lastB=B
             print(A,C,D,B)
             v=max(1,int((B[0]-A[0])*0.382))
-            if C is None:
-                C=self.enumCall(A[0]+v)
-            if D is None:
-                D=self.enumCall(B[0]-v)
+            C=self.enumCall(A[0]+v)
+            D=self.enumCall(B[0]-v)
             print(":",A,C,D,B)
             diff=C[1]-D[1]
+            aTargeted=bTargeted=1
             if diff==0:
                 A=C
                 B=D
@@ -74,16 +73,18 @@ class Solution:
                 A=C
                 C=D
                 D=None
+                bTargeted=0
             if diff>0:
                 B=D
                 D=C
                 C=None
-            if A[1]>=target:
+                aTargeted=0
+            if aTargeted and A[1]>=target:
                 if A[1]==target:
                     return A[0]
                 if limA is None:
                     limA=A
-            if B[1]>=target:
+            if bTargeted and B[1]>=target:
                 if limB is None:
                     limB=B
             if None not in (limA,limB):
@@ -97,9 +98,9 @@ class Solution:
         return res2
 
 def main():
-    MONT=MountainArray([0,1,2,2.5,4,3,0])
+    MONT=MountainArray([1,2,3,4,5,3,1]) # [0,1,2,4,2,1]
     SOL=Solution()
-    res=SOL.findInMountainArray(3,MONT)
+    res=SOL.findInMountainArray(2,MONT)
     print(res)
     return
 
