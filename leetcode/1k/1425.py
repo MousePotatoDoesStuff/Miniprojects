@@ -73,7 +73,7 @@ class Solution:
         m=max(nums)
         if m<=0:
             return m
-        X = SlidingMax(nums, 5)
+        X = SlidingMax(nums, 10)
         for i in range(len(nums)):
             X.change(i, X.getmax(i - k, i, 0)+nums[i])
             print(X.M)
