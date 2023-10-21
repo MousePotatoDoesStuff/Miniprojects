@@ -69,14 +69,14 @@ class Solution:
         if m<=0:
             return m
         X = SlidingMax(nums, 5)
-        best=0
+        best = 0
         for i in range(len(nums)):
-            curmax=X.getmax(i - k, i, 0)
-            X.change(i, curmax+nums[i])
+            curmax = X.getmax(i - k, i, 0)
+            X.change(i, curmax + nums[i])
             print(nums)
-            if best>curmax:
-                best=curmax
-        return nums[-1]
+            if best < curmax:
+                best = curmax
+        return best
 
 
 def main():
