@@ -11,7 +11,9 @@ class SlidingMax:
             c2 = None
             k2 = 0
             for e in cur:
-                if not c2 or e > c2:
+                if c2 is None:
+                    c2 = e
+                if or e > c2:
                     c2 = e
                 k2 += 1
                 if k2 == k:
