@@ -6,7 +6,7 @@ class SlidingMax:
         self.M = [L]
         self.k = k
         cur = L
-        while len(cur) > 0:
+        while len(cur) > 1:
             L2 = []
             c2 = None
             k2 = 0
@@ -18,9 +18,9 @@ class SlidingMax:
                     L2.append(c2)
                     c2 = None
                     k2 = 0
+            L2.append(c2)
             cur = L2
             self.M.append(L2)
-        self.M.pop()
 
     def change(self, index, value):
         if index not in range(len(self.M[0])):
@@ -37,6 +37,8 @@ class SlidingMax:
 
     def check(self, level, start, end, res):
         L = self.M[level]
+        if end>len(L):
+            end=len(L)
         for i in range(start, end):
             if res < L[i]:
                 res = L[i]
@@ -69,19 +71,17 @@ class Solution:
         if m<=0:
             return m
         X = SlidingMax(nums, 5)
-        best = 0
         for i in range(len(nums)):
-            curmax = X.getmax(i - k, i, 0)
-            X.change(i, curmax + nums[i])
-            print(nums)
-            if best < curmax:
-                best = curmax
-        return best
+            X.change(i, X.getmax(i - k, i, 0)+nums[i])
+        return X.M[-1][-1]
 
 
 def main():
     S = Solution()
-    L = [10, 2, -10, 5, 20]
+    L = [-10,-2,-10,5,-20,-23,-21]
+    X = SlidingMax(L, 5)
+    for e in X.M:
+        print(e)
     k = 2
     res = S.constrainedSubsetSum(L, k)
     print(res)
