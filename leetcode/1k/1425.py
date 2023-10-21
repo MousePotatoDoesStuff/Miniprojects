@@ -13,14 +13,15 @@ class SlidingMax:
             for e in cur:
                 if c2 is None:
                     c2 = e
-                if or e > c2:
+                if e > c2:
                     c2 = e
                 k2 += 1
                 if k2 == k:
                     L2.append(c2)
                     c2 = None
                     k2 = 0
-            L2.append(c2)
+            if c2 is not None:
+                L2.append(c2)
             cur = L2
             self.M.append(L2)
 
@@ -28,8 +29,8 @@ class SlidingMax:
         if index not in range(len(self.M[0])):
             return False
         for level, L in enumerate(self.M):
-            if len(L) < self.k:
-                L[index] = value
+            if len(L) == 1:
+                L[0] = value
                 return
             new, rem = divmod(index, self.k)
             a = index - rem
@@ -75,16 +76,17 @@ class Solution:
         X = SlidingMax(nums, 5)
         for i in range(len(nums)):
             X.change(i, X.getmax(i - k, i, 0)+nums[i])
+            print(X.M)
         return X.M[-1][-1]
 
 
 def main():
     S = Solution()
-    L = [-10,-2,-10,5,-20,-23,-21]
+    L = [-7609,249,-1699,2385,9125,-9037,1107,-8228,856,-9526]
     X = SlidingMax(L, 5)
     for e in X.M:
         print(e)
-    k = 2
+    k = 9
     res = S.constrainedSubsetSum(L, k)
     print(res)
     return
