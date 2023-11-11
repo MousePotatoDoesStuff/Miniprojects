@@ -17,13 +17,15 @@ class Graph:
 
     def shortestPath(self, node1: int, node2: int) -> int:
         X=[(0,node1)]
+        used=set()
         while X:
             E=heapq.heappop(X)
             if E[1]==node2:
                 return E[0]
+            used.add(E[1])
             L=self.M[E[1]]
             for j,f in enumerate(L):
-                if f is self.INF:
+                if f is self.INF or j in used:
                     continue
                 heapq.heappush(X,(E[0]+f,j))
         return -1
