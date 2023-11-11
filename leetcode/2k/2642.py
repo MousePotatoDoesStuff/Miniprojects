@@ -3,7 +3,6 @@ from typing import List
 
 
 class Graph:
-
     def __init__(self, n: int, edges: List[List[int]], INF=10**9+7):
         self.INF=INF
         self.M=[[INF for _j in range(n)] for _i in range(n)]
