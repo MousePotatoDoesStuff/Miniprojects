@@ -6,6 +6,7 @@ def solve(IN):
 
 
 in_loc = "AOC_2023_{}.txt"
+data = {'version': 2}
 
 
 def main():
