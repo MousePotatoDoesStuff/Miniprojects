@@ -2,20 +2,11 @@ from pathlib import Path
 
 
 def solve(IN):
-    res=0
-    for E in IN.split("\n"):
-        first=""
-        last=""
-        for e in E:
-            if e in "1234567890":
-                if first=="":
-                    first=e
-                last=e
-        res+=int('0'+first+last)
-    return res
+    return IN
 
 
 in_loc = "AOC_2023_{}.txt"
+data = {'version': 2}
 
 
 def main():
@@ -26,3 +17,7 @@ def main():
     OUT = solve(IN)
     print(OUT)
     return
+
+
+if __name__ == "__main__":
+    main()
