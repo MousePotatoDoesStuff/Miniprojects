@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def solve(IN):
-    return IN
+    return "TEST"
 
 
 in_loc = "AOC_2023_{}.txt"
