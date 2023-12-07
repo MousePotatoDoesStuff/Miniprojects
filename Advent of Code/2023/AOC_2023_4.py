@@ -1,3 +1,4 @@
+from collections import deque
 from pathlib import Path
 
 
@@ -26,9 +27,21 @@ def solve1(IN):
 
 def solve2(IN):
     TEMP=decipher_card(IN)
+    winners=[len(set(A)&set(B)) for (A,B) in TEMP]
+    print(max(winners))
+    Q=deque()
+    for i in range(10):
+        Q.append(1)
     res=0
-    WINNERS=[len(set(A)&set(B)) for (A,B) in TEMP]
-    print(WINNERS[-20:])
+    for i,e in enumerate(winners):
+        cur=Q.popleft()
+        res+=cur
+        Q.append(1)
+        if cur==0:
+            continue
+        for j in range(e):
+            Q[j]+=cur
+        print(i,Q)
     return res
 
 in_loc = "AOC_2023_{}.txt"
