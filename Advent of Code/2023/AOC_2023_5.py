@@ -82,19 +82,26 @@ def solve2(IN):
     temp = None
     for e in cur:
         if temp is None:
-            temp = cur
+            temp = e
         else:
-            cur2.append((temp, cur))
-            cur = None
-    cur2=cur
+            cur2.append((temp, e))
+            temp = None
+    cur=cur2
+    cur2=None
     cur.sort()
-    print(cur2)
+    print(cur)
     for EL in maps:
         new=[]
-        pointer = len(EL)-1
-        while cur:
-            F=EL.pop()
-
+        E=cur.pop()
+        F = EL.pop()
+        while cur and EL:
+            while F[0]>=E[1]:
+                F = EL.pop()
+            if F[1]<=E[0]:
+                new.append((E[0],E[1]))
+                E=nw
+        new.append(cur)
+        new.sort()
     return cur[0]
 
 
