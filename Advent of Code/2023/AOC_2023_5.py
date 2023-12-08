@@ -86,20 +86,35 @@ def solve2(IN):
         else:
             cur2.append((temp, e))
             temp = None
-    cur=cur2
-    cur2=None
+    cur = cur2
+    cur2 = None
     cur.sort()
     print(cur)
     for EL in maps:
-        new=[]
-        E=cur.pop()
+        new = []
+        E = cur.pop()
         F = EL.pop()
         while cur and EL:
-            while F[0]>=E[1]:
+            if F[0] >= E[1]:
                 F = EL.pop()
-            if F[1]<=E[0]:
-                new.append((E[0],E[1]))
-                E=nw
+                continue
+            if E[0] >= F[1]:
+                E = cur.pop()
+                continue
+            if F[1] > E[1]:
+                F = (F[0], E[1], F[2])
+            if F[1] < E[1]:
+                G = (F[1] + F[2], E[1] + F[2]) # add
+                new.append(G)
+                E = (E[0], F[1])
+            mv = max(E[0], F[0])
+            G = (mv + F[2], E[1] + F[2]) # add
+            new.append(G)
+            E = (E[0], mv)
+            if E[0] != E[1]:
+                G = (E[0], E[1]) # add
+                new.append(G)
+            E = cur.pop()
         new.append(cur)
         new.sort()
     return cur[0]
