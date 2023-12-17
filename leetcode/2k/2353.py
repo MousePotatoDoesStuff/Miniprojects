@@ -31,7 +31,7 @@ class Cuisine:
         return
 
     def highestRated(self) -> str:
-        return min(self.byRating[self.ratings[0]])
+        return min(self.byRating[-self.ratings[0]])
 
 class FoodRatings:
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
