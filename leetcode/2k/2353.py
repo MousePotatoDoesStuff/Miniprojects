@@ -8,7 +8,7 @@ class Cuisine:
         self.ratings = []
 
     def clearRatings(self):
-        while not self.byRating[self.ratings[0]]:
+        while not self.byRating[-self.ratings[0]]:
             e = -(heapq.heappop(self.ratings))
             self.byRating.pop(e)
         return
