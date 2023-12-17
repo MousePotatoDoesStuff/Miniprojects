@@ -28,10 +28,15 @@ class Cuisine:
         self.byFood[food] = newRating
         self.byRating[oldRating] -= {food}
         self.addRating(food, newRating)
+        self.clearRatings()
         return
 
     def highestRated(self) -> str:
-        return min(self.byRating[-self.ratings[0]])
+        print(self.byRating)
+        if not self.byRating:
+            return ""
+        e=-self.ratings[0]
+        return min(self.byRating[e])
 
 class FoodRatings:
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
