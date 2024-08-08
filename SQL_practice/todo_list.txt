@@ -1,0 +1,2 @@
+- add data types and constraints (notnull, default?, etc.) to columns
+- implement basic SELECT
