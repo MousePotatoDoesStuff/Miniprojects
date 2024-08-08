@@ -1,0 +1,45 @@
+SELECT:
+    go through entire database,
+    check for conditions,
+    create new database object accordingly
+INSERT:
+    add new entry at end of database
+UPDATE:
+    change value of row(s)
+DELETE:
+    delete rows that fit criteria/entire table(!)
+
+CREATE TABLE:
+    creates table. Let there be light.
+ALTER TABLE:
+    ADD COLUMN
+    DROP COLUMN
+    MODIFY COLUMN
+    other stuff I won't get into just now
+TRUNCATE TABLE:
+    empty table
+DROP TABLE:
+    delete not just the table data, but send the table itself to the shadow realm
+
+-columns referenced by name, order not relevant
+-rows referenced by index or primary key, order important
+-data not sparse
+-approximate expected column count: low (up to 20, probably under 10)
+-approximate expected row count: high (significantly more than 20)
+
+Divide twodimensional structure into two:
+    the external one that contains rows
+    the internal one that contains a row's data points
+    rowc=row count
+    colc=col count
+
+Choice of external structure (internal structure operation assumed to be O(1)):
+Regular array
+    SELECT: O(rowc)
+    INSERT: amortised O(1)
+    UPDATE: O(rowc)
+    DELETE: O(rowc)
+    CREATE: O(n)
+    ALTER: O(col)
+    TRUNCATE: O(1) or O(n) if no garbage collection
+    DROP: same as truncate
