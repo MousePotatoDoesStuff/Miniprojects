@@ -25,6 +25,13 @@ class RDBMS:
             indices.append(index)
         return
 
+    def wrap_condition(self, dict_condition):
+        def list_condition(L):
+            D={key:L[i] for i,key in enumerate(self.columns)}
+            val=dict_condition(D)
+            return val
+        return list_condition
+
     def insert_list(self, entry: list):
         n = len(self.columns)
         entry = entry[:n]
