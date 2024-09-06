@@ -2,23 +2,42 @@ from typing import *
 
 
 class Solution:
+    """
+    Solulu.
+    """
     def __init__(self):
-        self.test="test"
-    def Template(self, L:List,i:int):
+        self.test = "test"
+
+    def Template(self, L: List, i: int):
         return self.test
-    main=Template
 
-def test():
-    return ([0,1],1),"test"
+    main = Template
 
+
+TESTS = [
+    (([0, 1], 1), "test"),
+    (([0, 1], 2), "test")
+]
+
+
+def do_tests(tests):
+    """
+
+    :param tests:
+    """
+    SOL = Solution()
+    for i, (args, true_res) in enumerate(tests):
+        print(f"Test {i + 1}")
+        res = SOL.main(*args)
+        print("Got {} ({})".format(res, type(res)))
+        print("Expected {} ({})".format(true_res, type(true_res)))
 
 
 def main():
-    SOL=Solution()
-    args,true_res=test()
-    res=SOL.main(*args)
-    print("Got {} ({})".format(res,type(res)))
-    print("Expected {} ({})".format(true_res,type(true_res)))
+    """
+
+    :return:
+    """
     return
 
 
