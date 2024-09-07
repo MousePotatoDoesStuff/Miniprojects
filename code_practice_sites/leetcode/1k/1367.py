@@ -24,7 +24,7 @@ class Solution:
             for e in steps:
                 if tree_el.val!=e.val:
                     continue
-                nex=e.nex
+                nex=e.next
                 if nex is None:
                     return True
                 nex_steps.append(nex)
@@ -32,7 +32,7 @@ class Solution:
             B=tree_el.right,nex_steps
             L+=[A,B]
         return False
-    main = isSubPath()
+    main = isSubPath
 
 
 TESTS = [
