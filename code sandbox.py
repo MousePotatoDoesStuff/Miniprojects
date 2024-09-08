@@ -1,4 +1,5 @@
 from typing import List
+import nltk
 
 class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
