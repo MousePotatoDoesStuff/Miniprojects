@@ -1,10 +1,10 @@
 import re
-import tkinter as tk
 import customtkinter as ctk
 from tkinter.scrolledtext import ScrolledText
 
 import nltk
 from nltk.corpus import words
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 from Miniprojects.machine_learning.CTK_themes import DarkMode
 
@@ -18,12 +18,13 @@ def simplified(s:str):
 
 
 class SpellChecker01(ctk.CTkFrame):
-    def __init__(self, master, width=100, height=100, **kwargs):
+    def __init__(self, master, width=100, height=100, model_name="t5-small", **kwargs):
         super().__init__(master, width, height, **kwargs)
-        self.text = ScrolledText(self)
+        self.text = ScrolledText(self,width=42,height=42,font=("Agency FB",42))
         self.text.bind("<KeyRelease>", self.check)
         self.text.pack()
         self.old_spaces=0
+        self.model_name=model_name
 
     def check(self,_):
         content=self.text.get(1.0,ctk.END)
@@ -52,7 +53,7 @@ def main():
     :return:
     """
     MAIN = DarkMode.get_main()
-    schk = SpellChecker01(MAIN, 400, 400)
+    schk = SpellChecker01(MAIN, 100, 100)
     schk.pack()
     MAIN.mainloop()
     return
