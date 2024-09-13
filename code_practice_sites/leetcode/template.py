@@ -39,6 +39,7 @@ def main():
 
     :return:
     """
+    do_tests(TESTS)
     return
 
 if __name__ == "__main__":
