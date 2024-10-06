@@ -1,5 +1,5 @@
 if True:  # -10 python:
-    wasd='wasd'
+    wasd='teaswasd'
 def main():
     print('wololo')
 

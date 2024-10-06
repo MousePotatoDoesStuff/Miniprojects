@@ -1,0 +1,13 @@
+{
+  "locations": [
+    {
+      "basedir": "C:/Projects/py_miniprojects/Miniprojects/file_sync/PyDir",
+      "method": "PyRenSync"
+    },
+    {
+      "basedir": "C:/Projects/py_miniprojects/Miniprojects/file_sync/RenDir",
+      "method": "RenPyIns"
+    }
+  ],
+  "last_sync": 1728029998.8363354
+}

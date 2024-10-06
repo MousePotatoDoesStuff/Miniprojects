@@ -1,5 +1,15 @@
+import json
 import os.path
+import time
 from pathlib import Path
+
+
+def NextName(base, index, used, infix="_"):
+    name = base + infix + str(index)
+    while name in used:
+        index += 1
+        name = base + infix + str(index)
+    return name
 
 
 class iFileSyncMethod:
@@ -23,7 +33,18 @@ class iFileSyncMethod:
         """
         raise NotImplementedError
 
-    def convert_filename(self, filename:str) -> str:
+    def get_base_filename(self, filename):
+        """
+
+        :param filename:
+        """
+        raise NotImplementedError
+
+    def set_base_filename(self, filename):
+        """
+
+        :param filename:
+        """
         raise NotImplementedError
 
 
@@ -37,13 +58,15 @@ class WrapFileSyncMethod(iFileSyncMethod):
                  replacePairs: list[tuple] = None,
                  typeSwaps: list[tuple] = None,
                  includeStart: bool = False,
-                 includeEnd: bool = False):
+                 includeEnd: bool = False,
+                 swapExtension: list[tuple] = None):
         self.startMark = startMark
         self.endMark = endMark
         self.repl = replacePairs if replacePairs else []
         self.tswap = typeSwaps if typeSwaps else []
         self.includeStart = includeStart
         self.includeEnd = includeEnd
+        self.exswap = swapExtension if swapExtension else []
 
     def get_base_range(self, content):
         """
@@ -77,6 +100,18 @@ class WrapFileSyncMethod(iFileSyncMethod):
         res = old_content[:ia] + base + old_content[ib:]
         return res
 
+    def get_base_filename(self, filename: str):
+        for base_ext, this_ext in self.exswap:
+            if filename.endswith(this_ext):
+                return filename[:-len(this_ext)] + base_ext
+        return filename
+
+    def set_base_filename(self, filename: str):
+        for base_ext, this_ext in self.exswap:
+            if filename.endswith(base_ext):
+                return filename[:-len(base_ext)] + this_ext
+        return filename
+
 
 PyRenSyncMethod = WrapFileSyncMethod(
     '\nif True:',
@@ -84,13 +119,25 @@ PyRenSyncMethod = WrapFileSyncMethod(
     [
         ('\ninit ', '\nif True:  # ')
     ],
-    includeStart=True
+    includeStart=True,
+    swapExtension=[('.rpy', '.py')]
 )
 
-RenPySyncMethod = WrapFileSyncMethod(
+RenPyInsert = WrapFileSyncMethod(
     "",
     "\n\n"
 )
+
+NullMethod = WrapFileSyncMethod(
+    "",
+    ""
+)
+
+METHODS = {
+    'PyRenSync': PyRenSyncMethod,
+    'RenPyIns': RenPyInsert,
+    'Null': NullMethod,
+}
 
 
 class FileSyncInstance:
@@ -130,41 +177,58 @@ class FileSyncInstance:
         F.close()
         return
 
+    def get_base_filename(self):
+        return self.syncMethod.get_base_filename(self.path)
+
 
 class FileSyncLocation:
-    def __init__(self, basedir: str, defaultSyncMethod):
+    def __init__(self, basedir: str, defaultSyncMethod: iFileSyncMethod, defaultFileBase: str = "", **kwargs):
         self.basedir = basedir
         self.files: dict = {}
-        self.defSync = defaultSyncMethod
+        self.defSync: iFileSyncMethod = defaultSyncMethod
+        self.defaultFileBase = defaultFileBase
+
+    @classmethod
+    def from_json(cls, raw: dict):
+        methodname = raw.pop('method', '')
+        raw['defaultSyncMethod'] = METHODS[methodname]
+        return FileSyncLocation(**raw)
 
     def get_IDs(self):
         return set(self.files)
 
-    def search(self, dir, suffix="", keyprefix="", syncMethod=None):
-        syncMethod: iFileSyncMethod
-        syncMethod = syncMethod if syncMethod else self.defSync
+    def getExisting(self):
         existing = dict()
         for e, v in self.files.items():
             e: str
             v: FileSyncInstance
             existing[v.path] = e
+        return existing
+
+    def RegisterPath(self, rawpath, keyprefix, suffix, existing,
+                     syncMethod=None):
+        syncMethod: iFileSyncMethod
+        syncMethod = syncMethod if syncMethod else self.defSync
+        path = str(rawpath)
+        if path in existing:
+            return
+        if not path.endswith(suffix):
+            return
+        basename = keyprefix + str(os.path.basename(path))
+        name = NextName(basename, 0, existing, '')
+        fins = FileSyncInstance(path, syncMethod)
+        existing[path] = name
+        self.files[name] = fins
+        return
+
+    def search(self, dir, suffix="", keyprefix="", syncMethod=None):
+        syncMethod: iFileSyncMethod
+        syncMethod = syncMethod if syncMethod else self.defSync
+        existing = self.getExisting()
         directory = Path(dir)
-        res = list(directory.rglob('*'+suffix))
+        res = list(directory.rglob('*' + suffix))
         for path in res:
-            path = str(path)
-            if path in existing:
-                continue
-            if not path.endswith(suffix):
-                continue
-            basename = keyprefix + str(os.path.basename(path))
-            name = basename
-            ind = 0
-            while name in existing:
-                ind += 1
-                name = basename + str(ind)
-            fins = FileSyncInstance(path, syncMethod)
-            existing[path] = name
-            self.files[name] = fins
+            self.RegisterPath(path, keyprefix, suffix, existing, syncMethod)
         return
 
     def check_ID_last_change(self, ID):
@@ -176,7 +240,8 @@ class FileSyncLocation:
             return None
         if not os.path.isfile(path):
             return None
-        return os.path.getmtime(path)
+        res=os.path.getmtime(path)
+        return res
 
     def read_file(self, ID):
         if self.check_ID_last_change(ID) is None:
@@ -189,44 +254,123 @@ class FileSyncLocation:
             return False
         fsi: FileSyncInstance = self.files[ID]
         path = fsi.path
-        if not os.path.exists(path):
-            os.makedirs(path, exist_ok=True)
+        dirpath = os.path.dirname(os.path.abspath(path))
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath, exist_ok=True)
         fsi.write(new_data)
         return True
 
+    def get_base_filepaths(self) -> dict:
+        RES = {}
+        for ID, FSI in self.files.items():
+            FSI: FileSyncInstance
+            globalpath = FSI.path
+            localpath = os.path.relpath(globalpath, self.basedir)
+            basepath = FSI.syncMethod.get_base_filename(localpath)
+            RES[ID] = basepath
+        return RES
 
-class FileSynchroniser:
+    def set_base_filepaths(self, bases: dict):
+        for ID, basepath in bases.items():
+            globalpath = os.path.join(self.basedir, basepath)
+            truepath = self.defSync.set_base_filename(globalpath)
+            FSI = FileSyncInstance(truepath, self.defSync, self.defaultFileBase)
+            self.files[ID] = FSI
+        return
+
+
+class FileSyncMain:
     def __init__(self, locations: list[FileSyncLocation]):
         self.locations = locations
+        self.last_synced = 0.0
 
-    def sync(self, preserveMissing=True):
+    @classmethod
+    def from_json(cls, raw: dict):
+        last_sync = raw.get('last_sync', 0.0)
+        locs = []
+        raw_locations = raw.get('locations', [])
+        for rawloc in raw_locations:
+            loc=FileSyncLocation.from_json(rawloc)
+            locs.append(loc)
+        new = FileSyncMain(locs)
+        new.last_synced = last_sync
+        return new
+
+    def print_sync_diff(self,time):
+        if time is None:
+            print('N/A')
+            return
+        print(int(time-self.last_synced))
+
+    def save_data(self, old_json: dict):
+        old_json['last_sync'] = self.last_synced
+
+    def collect_IDs(self) -> set[int]:
         all_IDs = set()
         for loc in self.locations:
             IDs = loc.get_IDs()
             all_IDs |= IDs
-        for ID in all_IDs:
-            latest = None
-            lind = -1
-            for i, loc in enumerate(self.locations):
-                time = loc.check_ID_last_change(ID)
-                if time is None:
-                    return
-                if latest is None or latest < time:
-                    latest = time
-                    lind = i
-            if lind == -1:
+        return all_IDs
+
+    def delete_one(self, ID):
+        for i, loc in enumerate(self.locations):
+            file = loc.files.pop(ID, None)
+            if not file:
                 continue
-            filebase = self.locations[lind].read_file(ID)
-            for i, loc in enumerate(self.locations):
-                if i == lind:
-                    continue
-                loc.write_file(ID, filebase)
+            file: FileSyncInstance
+            if file.exists():
+                os.remove(file.path)
+        return
+
+    def sync_one(self, ID, preserveMissing=True, check_last_sync=True):
+        latest = None
+        lind = -1
+        fileMissing = False
+        times = []
+        for i, loc in enumerate(self.locations):
+            time = loc.check_ID_last_change(ID)
+            times.append(time)
+            if time is None:
+                fileMissing = True
+                continue
+            if latest:
+                print(time - latest, loc.files[ID].path)
+            if latest is None or latest < time:
+                latest = time
+                lind = i
+        print(latest, lind, fileMissing, times)
+        if fileMissing and not preserveMissing:
+            self.delete_one(ID)
+            return
+        if lind == -1:
+            return
+        print(f"Reading from {lind}")
+        filebase = self.locations[lind].read_file(ID)
+        for i, loc in enumerate(self.locations):
+            if i == lind:
+                continue
+            last_changed=times[i]
+            self.print_sync_diff(times[0])
+            if last_changed and last_changed > self.last_synced:
+                continue
+            print(f"Writing to {i}")
+            loc.write_file(ID, filebase)
+
+    def sync(self, preserveMissing=True, check_last_sync=True, curtime="now"):
+        print(f"Last sync:{int(self.last_synced)}")
+        all_IDs: set[int] = self.collect_IDs()
+        for ID in all_IDs:
+            self.sync_one(ID, preserveMissing, check_last_sync)
+        if curtime == "now":
+            curtime = float(time.time())
+        curtime: float
+        self.last_synced = curtime
         return
 
 
 def testInstances(reverse=False):
     P = FileSyncInstance("PyDir/test.py", PyRenSyncMethod)
-    R = FileSyncInstance("RenDir/test.rpy", RenPySyncMethod)
+    R = FileSyncInstance("RenDir/test.rpy", RenPyInsert)
     if reverse:
         R, P = P, R
     text = R.read()
@@ -236,13 +380,37 @@ def testInstances(reverse=False):
 
 def testLocations():
     P = FileSyncLocation("C:/Projects/py_miniprojects/Miniprojects/file_sync/PyDir", PyRenSyncMethod)
-    R = FileSyncLocation("C:/Projects/py_miniprojects/Miniprojects/file_sync/RenDir", RenPySyncMethod)
-    R.search(R.basedir,".rpy","test_")
-    print(R.files.keys())
+    R = FileSyncLocation("C:/Projects/py_miniprojects/Miniprojects/file_sync/RenDir", RenPyInsert)
+    R.search(R.basedir, ".rpy", "test_")
+    paths = R.get_base_filepaths()
+    for e, V in paths.items():
+        print(f"{e}\t\t{str(V)}")
+    P.set_base_filepaths(paths)
+    SYN = FileSyncMain([P, R])
+    SYN.sync()
+
+def testFinal():
+    filepath="test.filesync.json"
+    F=open(filepath,'r')
+    raw=F.read()
+    F.close()
+    data=json.loads(raw)
+    SYN=FileSyncMain.from_json(data)
+    data=json.loads(raw)
+    P,R=SYN.locations
+    R.search(R.basedir, ".rpy", "test_")
+    paths = R.get_base_filepaths()
+    P.set_base_filepaths(paths)
+    SYN.sync()
+    SYN.save_data(data)
+    raw2=json.dumps(data,indent=2)
+    F=open(filepath,'w')
+    F.write(raw2)
+    F.close()
 
 
 def main():
-    testLocations()
+    testFinal()
     return
 
 
