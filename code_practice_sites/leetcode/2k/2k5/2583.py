@@ -1,19 +1,44 @@
+import heapq
 from typing import *
 import inspect
 
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class Solution:
-    """
-    Solulu.
-    """
 
     def __init__(self):
-        self.test = "test"
+        self.cur = []
 
-    def Template(self, L: List, i: int):
-        return self.test
+    def step(self):
+        nex = []
+        res = 0
+        for e in self.cur:
+            e: TreeNode
+            res += e.val
+            chi = [e.left, e.right]
+            nex += [e for e in chi if e is not None]
+        self.cur = nex
+        return res
 
-    main = Template
+    def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:
+        if root is None:
+            return -1
+        self.cur = [root]
+        stack = []
+        while self.cur:
+            cursum = self.step()
+            heapq.heappush(stack, cursum)
+            if len(stack) > k:
+                heapq.heappop(stack)
+        return stack[0] if len(stack) == k else -1
+
+    main = kthLargestLevelSum
 
 
 TESTS = [
