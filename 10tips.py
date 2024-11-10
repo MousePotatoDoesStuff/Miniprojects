@@ -27,7 +27,7 @@ def tip1():
 
 def tip2():
     """
-    Use setdefault, not just getdefault.
+    Use setdefault, not just get.
     """
     X = {1: 1}
     Y = [X.setdefault(i, 0) for i in range(3)]
