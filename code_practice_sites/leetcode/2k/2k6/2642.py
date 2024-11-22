@@ -32,7 +32,7 @@ class Graph:
 
 
 # Your Graph object will be instantiated and called as such:
-# obj = Graph(n, edges)
+# obj = Graph(col_lim, edges)
 # obj.addEdge(edge)
 # param_2 = obj.shortestPath(node1,node2)
 
