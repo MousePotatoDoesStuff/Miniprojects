@@ -12,6 +12,7 @@ class Count:
             if e != cur:
                 self.values.append((cur, i - first))
                 cur = e
+                first = i
         self.size = len(self.values)
 
     def getRemainingCount(self, A: tuple[int, int]):
@@ -19,9 +20,9 @@ class Count:
             return 0
         return self.values[A[0]][1] - A[1]
 
-    def compare(self, A, B):
-        a = self.values[A]
-        b = self.values[B]
+    def compare(self, A:tuple, B:tuple):
+        a:str = self.values[A[0]][0]
+        b:str = self.values[B[0]][0]
         return (a < b) - (a > b)
 
     def getMinRemaining(self, A, B):
@@ -32,7 +33,7 @@ class Count:
     def step(self, A, n):
         i, j = A
         j += n
-        if j == self.values[i]:
+        if j == self.values[i][1]:
             i += 1
             j = 0
         return i, j
@@ -73,14 +74,8 @@ class Solution:
 
 
 TESTS = [
-    (
-        ([0, 1], 1),
-        "test")
-    ,
-    (
-        ([0, 1], 2),
-        "also test"
-    )
+    (("abab",),"bab"),
+    (("xxbbxxbx",),"xxbx")
 ]
 
 
@@ -92,6 +87,7 @@ def do_tests(tests, only_show_errors=True):
     """
     SOL = Solution()
     count = 0
+    print("Running...")
     for i, (args, true_res) in enumerate(tests):
         res = SOL.main(*args)
         count += res == true_res
@@ -108,7 +104,7 @@ def main():
 
     :return:
     """
-    do_tests(TESTS)
+    do_tests(TESTS,False)
     return
 
 

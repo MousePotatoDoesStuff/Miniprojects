@@ -36,6 +36,7 @@ def do_tests(tests, only_show_errors=True):
     """
     SOL = Solution()
     count = 0
+    print("Running...")
     for i, (args, true_res) in enumerate(tests):
         res = SOL.main(*args)
         count += res == true_res
