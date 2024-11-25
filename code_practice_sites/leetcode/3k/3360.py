@@ -1,31 +1,33 @@
+import math
 from typing import *
 import inspect
 
 
+s=-0.5
+r=-10.5
+p=55.125-1
 class Solution:
-    """
-    Solulu.
-    """
+    def canAliceWin(self, n: int) -> bool:
+        step=(n-p)/s
+        step=math.sqrt(step)
+        return int(r-step)%2
 
-    def __init__(self):
-        self.test = "test"
-
-    def Template(self, L: List, i: int):
-        return self.test
-
-    main = Template
+    main = canAliceWin
 
 
 TESTS = [
-    (
-        ([0, 1], 1),
-        "test")
-    ,
-    (
-        ([0, 1], 2),
-        "also test"
-    )
+
 ]
+def do_acc():
+    acc = 0
+    cur = False
+    SOL=Solution()
+    for i in range(10, 0, -1):
+        for j in range(i):
+            print(int(SOL.canAliceWin(acc)),end='')
+            acc += 1
+        print()
+        cur=not cur
 
 
 def do_tests(tests, only_show_errors=True):
@@ -53,7 +55,8 @@ def main():
 
     :return:
     """
-    do_tests(TESTS)
+    do_acc()
+    # do_tests(TESTS)
     return
 
 
