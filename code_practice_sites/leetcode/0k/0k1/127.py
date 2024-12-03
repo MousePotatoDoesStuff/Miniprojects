@@ -1,30 +1,96 @@
 from typing import *
-import inspect
+
+
+class TrieNode:
+    def __init__(self):
+        self.next = {}
+
+    def add(self, c):
+        nex = self.next.get(c, TrieNode())
+        self.next[c] = nex
+        return nex
+
+    def check(self, c, default=None):
+        res = self.next.get(c, default)
+        return res
+
+
+class Trie:
+    def __init__(self, L: list[str]):
+        self.root = TrieNode()
+        while L:
+            s = L.pop()
+            self.add(s)
+
+    def add(self, s):
+        cur = self.root
+        for e in s:
+            cur = cur.add(e)
+
+    def step(self, L: List[TrieNode], c):
+        NL = []
+        for el in L:
+            nel = el.check(c)
+            if nel is None:
+                continue
+            NL.append(nel)
+        NL.append(self.root)
+        return NL
+
+    def check(self, s, cur=None):
+        if cur is None:
+            cur = self.root
+        for e in s:
+            cur = cur.check(e)
+            if not cur:
+                return False
+        return True
+
+    def findOneDiff(self, s, RES: set):
+        cur: TrieNode = self.root
+        X = list(s)
+        X.reverse()
+        prefix = ''
+        for e in s:
+            X.pop()
+            remaining = ''.join(X)[::-1]
+            for c, node in cur.next.items():
+                if c == e:
+                    continue
+                if self.check(remaining, node):
+                    RES.add(prefix + c + remaining)
+            cur = cur.check(e, None)
+            if not cur:
+                break
+            prefix += e
+        return RES
 
 
 class Solution:
-    """
-    Solulu.
-    """
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        T = Trie(wordList)
+        used = set()
+        cur = {beginWord}
+        score = 1
+        while cur:
+            nex = set()
+            for e in cur:
+                T.findOneDiff(e, nex)
+            score += 1
+            if endWord in nex:
+                return score
+            nex -= used
+            used |= cur
+            cur = nex
+        return 0
 
-    def __init__(self):
-        self.test = "test"
-
-    def Template(self, L: List, i: int):
-        return self.test
-
-    main = Template
+    main = ladderLength
 
 
 TESTS = [
     (
-        ([0, 1], 1),
-        "test")
-    ,
-    (
-        ([0, 1], 2),
-        "also test"
-    )
+        ("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]),
+        5)
 ]
 
 
