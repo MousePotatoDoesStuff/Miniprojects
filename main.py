@@ -1,12 +1,16 @@
 # This is a sample Python script.
 
+
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-
+import traceback
 def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    try:
+        raise ValueError(name)
+    except ValueError as err:
+        tb_str = traceback.format_exc()
+        print(tb_str)
 
 
 # Press the green button in the gutter to run the script.
